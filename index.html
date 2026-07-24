@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aurora AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    --bg-void:#0B0F1F;
+    --bg-surface:#151A33;
+    --bg-surface-2:#1E2444;
+    --bg-surface-3:#262C50;
+    --hairline:#2A3159;
+
+    --violet:#8B5CF6;
+    --violet-soft:rgba(139,92,246,.16);
+    --cyan:#22D3EE;
+    --cyan-soft:rgba(34,211,238,.16);
+    --pink:#F472B6;
+    --pink-soft:rgba(244,114,182,.16);
+    --mint:#34D399;
+    --mint-soft:rgba(52,211,153,.16);
+    --amber:#FBBF24;
+    --amber-soft:rgba(251,191,36,.16);
+
+    --text-primary:#F5F6FF;
+    --text-muted:#9096B8;
+    --text-faint:#5E6489;
+
+    --font-display:'Manrope',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+
+    --radius-lg:22px;
+    --radius-md:16px;
+    --radius-sm:11px;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:#05070f;
+    font-family:var(--font-body);
+    color:var(--text-primary);
+    display:flex;
+    justify-content:center;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:var(--bg-void);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* ---------- starfield ---------- */
+  .stars{
+    position:absolute; inset:0; height:340px;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,.55), transparent),
+      radial-gradient(1.5px 1.5px at 28% 9%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 44% 24%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 63% 6%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 77% 20%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 91% 12%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 8% 34%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 55% 38%, rgba(255,255,255,.25), transparent);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ---------- header ---------- */
+  .topbar{
+    position:relative; z-index:2;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 18px 4px;
+  }
+  .brand{display:flex; align-items:center; gap:9px;}
+  .brand-mark{
+    width:30px;height:30px;border-radius:9px;
+    background:conic-gradient(from 200deg, var(--violet), var(--cyan), var(--pink), var(--violet));
+    flex-shrink:0;
+  }
+  .brand-name{font-family:var(--font-display); font-weight:800; font-size:16px; letter-spacing:.2px;}
+  .plan-chip{
+    display:flex; align-items:center; gap:6px;
+    background:var(--bg-surface); border:1px solid var(--hairline);
+    padding:7px 12px; border-radius:100px;
+    font-family:var(--font-mono); font-size:12.5px; font-weight:600;
+    color:var(--text-primary);
+  }
+  .plan-chip .dot{width:6px;height:6px;border-radius:50%; background:var(--mint);}
+
+  /* ---------- view container ---------- */
+  .views{
+    position:relative; z-index:1;
+    flex:1;
+    overflow-y:auto;
+    padding-bottom:96px;
+    scrollbar-width:none;
+  }
+  .views::-webkit-scrollbar{display:none;}
+  .view{display:none; padding:14px 18px 8px; animation:fadeUp .32s ease;}
+  .view.active{display:block;}
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  h1,h2,h3{font-family:var(--font-display); margin:0;}
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--text-faint); margin:0 0 8px;
+  }
+
+  /* ---------- hero / aurora ribbon (signature element) ---------- */
+  .hero{
+    position:relative;
+    border-radius:var(--radius-lg);
+    padding:20px 20px 22px;
+    overflow:hidden;
+    background:var(--bg-surface);
+    border:1px solid var(--hairline);
+    margin-top:6px;
+  }
+  .ribbon{
+    position:absolute; left:-20%; right:-20%; top:-60%; height:180px;
+    background:linear-gradient(120deg, var(--violet), var(--cyan) 45%, var(--pink) 75%, var(--mint));
+    filter:blur(38px);
+    opacity:.55;
+    animation:drift 9s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    from{ transform:translateX(-4%) rotate(-2deg); }
+    to{ transform:translateX(4%) rotate(2deg); }
+  }
+  .hero-row{position:relative; display:flex; align-items:center; gap:12px;}
+  .avatar{
+    width:52px;height:52px;border-radius:16px;
+    background:linear-gradient(145deg, var(--violet), var(--pink));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:800; font-size:20px;
+    flex-shrink:0;
+  }
+  .hero-greeting{font-size:13px; color:var(--text-muted); margin:0 0 2px;}
+  .hero-name{font-size:19px; font-weight:800;}
+  .hero-stats{
+    position:relative; display:flex; gap:10px; margin-top:16px;
+  }
+  .stat-pill{
+    flex:1; background:var(--bg-surface-2); border-radius:var(--radius-sm);
+    padding:10px 12px; border:1px solid var(--hairline);
+  }
+  .stat-pill .n{font-family:var(--font-mono); font-weight:600; font-size:15px;}
+  .stat-pill .l{font-size:11px; color:var(--text-muted); margin-top:2px;}
+
+  /* ---------- tool cards ---------- */
+  .section-title{
+    display:flex; align-items:center; justify-content:space-between;
+    margin:22px 0 10px;
+  }
+  .section-title h2{font-size:15px; font-weight:700;}
+  .section-title .see-all{font-size:12.5px; color:var(--cyan); font-weight:600;}
+
+  .tool-hero{
+    display:flex; gap:14px; align-items:center;
+    border-radius:var(--radius-lg);
+    padding:18px;
+    background:linear-gradient(135deg, #2A1F55, #1A2A52);
+    border:1px solid var(--hairline);
+    cursor:pointer;
+  }
+  .tool-hero .ic{
+    width:46px;height:46px;border-radius:13px;
+    background:var(--violet-soft); color:var(--violet);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .tool-hero h3{font-size:16.5px; margin-bottom:3px;}
+  .tool-hero p{margin:0; font-size:12.5px; color:var(--text-muted);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;}
+  .tool-card{
+    background:var(--bg-surface); border:1px solid var(--hairline);
+    border-radius:var(--radius-md); padding:15px; cursor:pointer;
+  }
+  .tool-card .ic{
+    width:38px;height:38px;border-radius:11px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+  }
+  .tool-card h4{font-size:14px; font-weight:700; margin:0 0 3px;}
+  .tool-card p{font-size:11.5px; color:var(--text-muted); margin:0; line-height:1.35;}
+  .tool-card.cyan .ic{background:var(--cyan-soft); color:var(--cyan);}
+  .tool-card.pink .ic{background:var(--pink-soft); color:var(--pink);}
+  .tool-card.mint .ic{background:var(--mint-soft); color:var(--mint);}
+  .tool-card.amber .ic{background:var(--amber-soft); color:var(--amber);}
+
+  .plan-banner{
+    margin-top:14px; display:flex; align-items:center; justify-content:space-between;
+    background:var(--bg-surface); border:1px solid var(--hairline);
+    border-radius:var(--radius-md); padding:14px 16px; cursor:pointer;
+  }
+  .plan-banner h4{font-size:14px; margin:0 0 3px;}
+  .plan-banner p{font-size:12px; color:var(--text-muted); margin:0;}
+  .badge-free{
+    font-family:var(--font-mono); font-size:11px; font-weight:600;
+    background:var(--bg-surface-3); color:var(--text-muted);
+    padding:5px 10px; border-radius:100px;
+  }
+
+  .model-row{display:flex; gap:8px; margin-top:10px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none;}
+  .model-row::-webkit-scrollbar{display:none;}
+  .model-chip{
+    flex-shrink:0; display:flex; align-items:center; gap:6px;
+    padding:9px 13px; border-radius:100px; font-size:12.5px; font-weight:600;
+    background:var(--bg-surface); border:1px solid var(--hairline); color:var(--text-muted);
+    white-space:nowrap; cursor:pointer;
+  }
+  .model-chip .dot{width:6px;height:6px;border-radius:50%; background:var(--text-faint);}
+  .model-chip.active{border-color:var(--violet); color:var(--text-primary); background:var(--violet-soft);}
+  .model-chip.active .dot{background:var(--violet);}
+  .model-chip.locked{opacity:.5;}
+
+  /* ---------- create view: tabs ---------- */
+  .tabs{display:flex; gap:6px; background:var(--bg-surface); border:1px solid var(--hairline); border-radius:100px; padding:4px; margin-top:4px;}
+  .tab{flex:1; text-align:center; padding:9px 4px; border-radius:100px; font-size:13px; font-weight:600; color:var(--text-muted); cursor:pointer;}
+  .tab.active{background:var(--bg-surface-3); color:var(--text-primary);}
+
+  .subpane{display:none;}
+  .subpane.active{display:block;}
+
+  .field-label{font-size:12px; color:var(--text-muted); margin:18px 0 8px; font-weight:600;}
+  textarea, input[type=text]{
+    width:100%; background:var(--bg-surface); border:1px solid var(--hairline); border-radius:var(--radius-md);
+    color:var(--text-primary); font-family:var(--font-body); font-size:14px; padding:14px; resize:none;
+  }
+  textarea::placeholder, input::placeholder{color:var(--text-faint);}
+  textarea:focus, input:focus{outline:2px solid var(--violet); outline-offset:1px;}
+
+  .btn-primary{
+    width:100%; margin-top:14px; border:none; cursor:pointer;
+    background:linear-gradient(120deg, var(--violet), var(--pink));
+    color:#fff; font-family:var(--font-display); font-weight:700; font-size:14.5px;
+    padding:15px; border-radius:var(--radius-md);
+  }
+  .btn-primary:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+
+  .chat-window{
+    background:var(--bg-surface); border:1px solid var(--hairline); border-radius:var(--radius-md);
+    padding:14px; margin-top:14px; min-height:220px; display:flex; flex-direction:column; gap:10px;
+  }
+  .bubble{max-width:78%; padding:10px 13px; border-radius:14px; font-size:13.5px; line-height:1.4;}
+  .bubble.user{align-self:flex-end; background:var(--violet); color:#fff; border-bottom-right-radius:4px;}
+  .bubble.bot{align-self:flex-start; background:var(--bg-surface-2); border-bottom-left-radius:4px;}
+  .chat-input-row{display:flex; gap:8px; margin-top:12px;}
+  .chat-input-row input{flex:1;}
+  .send-btn{
+    width:44px; flex-shrink:0; border:none; border-radius:var(--radius-sm); cursor:pointer;
+    background:linear-gradient(120deg, var(--violet), var(--cyan)); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .style-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;}
+  .style-card{
+    border:1px solid var(--hairline); border-radius:var(--radius-md); padding:13px; background:var(--bg-surface); cursor:pointer;
+  }
+  .style-card.selected{border-color:var(--cyan); background:var(--cyan-soft);}
+  .style-card h5{margin:0 0 4px; font-size:13.5px;}
+  .style-card p{margin:0; font-size:11px; color:var(--text-muted); line-height:1.3;}
+
+  .dropzone{
+    margin-top:8px; border:1.5px dashed var(--hairline); border-radius:var(--radius-md);
+    padding:30px 16px; text-align:center; color:var(--text-muted); font-size:13px;
+  }
+  .dropzone b{color:var(--text-primary); display:block; margin-bottom:4px; font-size:14px;}
+
+  .lock-note{
+    display:flex; gap:10px; align-items:flex-start; margin-top:14px;
+    background:var(--amber-soft); border:1px solid rgba(251,191,36,.3); border-radius:var(--radius-md); padding:12px 14px;
+  }
+  .lock-note p{margin:0; font-size:12.5px; color:#EFD48A; line-height:1.4;}
+
+  /* ---------- history / empty state ---------- */
+  .empty-state{
+    margin-top:60px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:0 20px;
+  }
+  .empty-ic{
+    width:64px;height:64px;border-radius:20px;
+    background:linear-gradient(135deg, var(--violet-soft), var(--pink-soft));
+    display:flex; align-items:center; justify-content:center; color:var(--violet);
+  }
+  .empty-state h3{font-size:15.5px;}
+  .empty-state p{margin:0; font-size:13px; color:var(--text-muted); max-width:260px; line-height:1.5;}
+
+  /* ---------- tariffs ---------- */
+  .plan-card{
+    border-radius:var(--radius-lg); border:1px solid var(--hairline); background:var(--bg-surface);
+    padding:18px; margin-bottom:12px; position:relative; overflow:hidden;
+  }
+  .plan-card.highlight{border-color:var(--violet);}
+  .plan-card.highlight::before{
+    content:'popular'; position:absolute; top:14px; right:-30px; transform:rotate(35deg);
+    background:var(--violet); color:#fff; font-size:9.5px; font-family:var(--font-mono); font-weight:600;
+    padding:3px 34px; letter-spacing:.06em; text-transform:uppercase;
+  }
+  .plan-head{display:flex; justify-content:space-between; align-items:flex-start;}
+  .plan-head h3{font-size:15.5px;}
+  .plan-price{font-family:var(--font-mono); font-weight:600; font-size:15px; color:var(--cyan); white-space:nowrap;}
+  .plan-price small{display:block; font-size:10.5px; color:var(--text-faint); font-weight:500; text-align:right;}
+  .plan-features{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px;}
+  .plan-features li{font-size:12.5px; color:var(--text-muted); display:flex; gap:8px; line-height:1.4;}
+  .plan-features li svg{flex-shrink:0; margin-top:2px;}
+  .plan-cta{
+    margin-top:14px; width:100%; border:none; cursor:pointer; border-radius:var(--radius-sm);
+    padding:12px; font-family:var(--font-display); font-weight:700; font-size:13.5px;
+    background:var(--bg-surface-3); color:var(--text-primary);
+  }
+  .plan-card.highlight .plan-cta{background:linear-gradient(120deg, var(--violet), var(--pink)); color:#fff;}
+
+  /* ---------- profile ---------- */
+  .profile-banner{
+    border-radius:var(--radius-lg); padding:22px; position:relative; overflow:hidden;
+    background:var(--bg-surface); border:1px solid var(--hairline); margin-top:6px;
+  }
+  .profile-banner .ribbon{opacity:.5;}
+  .profile-row{position:relative; display:flex; align-items:center; gap:14px;}
+  .profile-row .avatar{width:56px;height:56px; font-size:22px;}
+  .profile-row h2{font-size:18px;}
+  .profile-row p{margin:2px 0 0; font-size:12.5px; color:var(--text-muted);}
+
+  .list-group{margin-top:20px; background:var(--bg-surface); border:1px solid var(--hairline); border-radius:var(--radius-md); overflow:hidden;}
+  .list-item{
+    display:flex; align-items:center; gap:12px; padding:14px 15px; cursor:pointer;
+    border-bottom:1px solid var(--hairline);
+  }
+  .list-item:last-child{border-bottom:none;}
+  .list-item .ic{width:34px;height:34px;border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .list-item .body{flex:1; min-width:0;}
+  .list-item .body h5{margin:0; font-size:13.5px; font-weight:600;}
+  .list-item .body span{font-size:11.5px; color:var(--text-muted);}
+  .list-item .val{font-size:12.5px; color:var(--text-muted); font-family:var(--font-mono);}
+  .list-item .chev{color:var(--text-faint); flex-shrink:0;}
+
+  .lang-toggle{display:flex; gap:8px; margin-top:20px;}
+  .lang-btn{
+    flex:1; text-align:center; padding:12px; border-radius:var(--radius-sm); font-weight:600; font-size:13px; cursor:pointer;
+    background:var(--bg-surface); border:1px solid var(--hairline); color:var(--text-muted);
+  }
+  .lang-btn.active{background:var(--violet-soft); border-color:var(--violet); color:var(--text-primary);}
+
+  .footnote{text-align:center; color:var(--text-faint); font-size:11.5px; margin:22px 0 6px;}
+
+  /* ---------- bottom nav ---------- */
+  .navbar{
+    position:absolute; left:0; right:0; bottom:0; z-index:3;
+    display:flex; justify-content:space-around; align-items:center;
+    padding:8px 6px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(11,15,31,.92); backdrop-filter:blur(14px);
+    border-top:1px solid var(--hairline);
+  }
+  .nav-btn{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:none; border:none; color:var(--text-faint); cursor:pointer;
+    font-family:var(--font-body); font-size:10.5px; padding:4px 10px; border-radius:12px;
+  }
+  .nav-btn.active{color:var(--text-primary);}
+  .nav-btn.active svg{color:var(--cyan);}
+
+  /* toast */
+  .toast{
+    position:absolute; left:50%; bottom:100px; transform:translateX(-50%) translateY(10px);
+    background:var(--bg-surface-3); border:1px solid var(--hairline); color:var(--text-primary);
+    padding:11px 18px; border-radius:100px; font-size:12.5px; font-weight:600;
+    opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; z-index:10; white-space:nowrap;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="stars"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">Aurora AI</span>
+    </div>
+    <div class="plan-chip"><span class="dot"></span>Free · неделя</div>
+  </div>
+
+  <div class="views">
+
+    <!-- ================= HOME ================= -->
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <div class="ribbon"></div>
+        <div class="hero-row">
+          <div class="avatar">A</div>
+          <div>
+            <p class="hero-greeting">С возвращением,</p>
+            <h2 class="hero-name">Alex</h2>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-pill"><div class="n">73/100</div><div class="l">запросов на неделе</div></div>
+          <div class="stat-pill"><div class="n">18/25</div><div class="l">картинок на неделе</div></div>
+        </div>
+      </div>
+
+      <div class="section-title"><h2>Сейчас в фокусе</h2></div>
+      <div class="tool-hero" data-open="create" data-tab="chat">
+        <div class="ic">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <h3>Чат с ИИ</h3>
+          <p>GPT · Claude · Gemini — в одном окне</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="tool-card cyan" data-open="create" data-tab="image">
+          <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="9" r="1.6" fill="currentColor"/><path d="M21 15l-5-5-9 9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          <h4>Генерация фото</h4>
+          <p>Nano Banana, GPT Image</p>
+        </div>
+        <div class="tool-card pink" data-open="create" data-tab="translate">
+          <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 6h9M8 4v2.2C8 10 6 13 3 14.5M6 10c1 1.8 3 3 6 3.5M14 20l4-9 4 9M15.3 17h5.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h4>Переводчик</h4>
+          <p>10 языков, 4 стиля</p>
+        </div>
+        <div class="tool-card mint" data-open="create" data-tab="docs">
+          <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
+          <h4>Документы</h4>
+          <p>PDF, Word, Excel — премиум</p>
+        </div>
+        <div class="tool-card amber" data-open="profile">
+          <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 6.6 7.1.5-5.5 4.6 1.9 6.9L12 17l-6.1 3.6 1.9-6.9-5.5-4.6 7.1-.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <h4>Пригласить</h4>
+          <p>+5 запросов за друга</p>
+        </div>
+      </div>
+
+      <div class="plan-banner" data-open="tariffs">
+        <div>
+          <h4>Бесплатный тариф</h4>
+          <p>Подключи Premium — без лимитов</p>
+        </div>
+        <span class="badge-free">FREE</span>
+      </div>
+
+      <div class="section-title"><h2>Текущие модели</h2><span class="see-all" data-open="create" data-tab="chat">все →</span></div>
+      <div class="model-row">
+        <div class="model-chip active"><span class="dot"></span>GPT-5.4 mini</div>
+        <div class="model-chip"><span class="dot"></span>Claude Sonnet 5</div>
+        <div class="model-chip"><span class="dot"></span>Gemini 3 Flash</div>
+        <div class="model-chip locked"><span class="dot"></span>🔒 Claude Opus 4.8</div>
+      </div>
+    </section>
+
+    <!-- ================= CREATE ================= -->
+    <section class="view" id="view-create">
+      <h2 style="font-size:18px; margin-bottom:14px;">Создать</h2>
+      <div class="tabs">
+        <div class="tab active" data-tab="chat">Чат</div>
+        <div class="tab" data-tab="image">Фото</div>
+        <div class="tab" data-tab="translate">Перевод</div>
+        <div class="tab" data-tab="docs">Документ</div>
+      </div>
+
+      <!-- CHAT -->
+      <div class="subpane active" id="tab-chat">
+        <p class="field-label" style="margin-top:16px;">Модель</p>
+        <div class="model-row">
+          <div class="model-chip active"><span class="dot"></span>GPT-5.4 mini ⚡</div>
+          <div class="model-chip"><span class="dot"></span>Claude Sonnet 5 🎭</div>
+          <div class="model-chip"><span class="dot"></span>Gemini 3 Flash 💎</div>
+          <div class="model-chip locked"><span class="dot"></span>🔒 GPT-5.5</div>
+        </div>
+        <div class="chat-window">
+          <div class="bubble user">Сократи это письмо до трёх предложений</div>
+          <div class="bubble bot">Готово — вот сжатая версия, сохранил основную просьбу и дедлайн в конце сообщения.</div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" placeholder="Напиши сообщение…">
+          <button class="send-btn" onclick="showToast('Демо-режим: подключим к боту позже')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- IMAGE -->
+      <div class="subpane" id="tab-image">
+        <p class="field-label" style="margin-top:16px;">Стиль</p>
+        <div class="style-grid">
+          <div class="style-card selected" onclick="selectStyle(this)">
+            <h5>GPT Standard</h5>
+            <p>Без доп. модификаторов</p>
+          </div>
+          <div class="style-card" onclick="selectStyle(this)">
+            <h5>Nano Banana 🍌</h5>
+            <p>Кинематографичный свет</p>
+          </div>
+        </div>
+        <p class="field-label">Модель</p>
+        <div class="model-row">
+          <div class="model-chip active"><span class="dot"></span>GPT Image 1.5</div>
+          <div class="model-chip locked"><span class="dot"></span>🔒 Flux Kontext Pro</div>
+          <div class="model-chip locked"><span class="dot"></span>🔒 Gemini 3 Pro Image</div>
+        </div>
+        <p class="field-label">Промт</p>
+        <textarea rows="4" placeholder="Опиши, что нарисовать…"></textarea>
+        <button class="btn-primary" onclick="showToast('Демо-режим: генерация появится после интеграции')">Сгенерировать</button>
+      </div>
+
+      <!-- TRANSLATE -->
+      <div class="subpane" id="tab-translate">
+        <p class="field-label" style="margin-top:16px;">Язык перевода</p>
+        <div class="model-row">
+          <div class="model-chip active"><span class="dot"></span>🇬🇧 English</div>
+          <div class="model-chip"><span class="dot"></span>🇩🇪 Deutsch</div>
+          <div class="model-chip"><span class="dot"></span>🇨🇳 中文</div>
+          <div class="model-chip"><span class="dot"></span>🇹🇷 Türkçe</div>
+        </div>
+        <p class="field-label">Стиль</p>
+        <div class="model-row">
+          <div class="model-chip active"><span class="dot"></span>Дружеский</div>
+          <div class="model-chip"><span class="dot"></span>Деловой</div>
+          <div class="model-chip"><span class="dot"></span>Формальный</div>
+        </div>
+        <p class="field-label">Текст</p>
+        <textarea rows="4" placeholder="Вставь текст для перевода…"></textarea>
+        <button class="btn-primary" onclick="showToast('Демо-режим: перевод появится после интеграции')">Перевести</button>
+      </div>
+
+      <!-- DOCS -->
+      <div class="subpane" id="tab-docs">
+        <div class="dropzone" style="margin-top:16px;">
+          <b>Отправь документ</b>
+          PDF, DOCX, CSV или Excel — задай вопрос по содержимому
+        </div>
+        <div class="lock-note">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px;"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#EFD48A" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#EFD48A" stroke-width="1.6"/></svg>
+          <p>Работа с документами доступна на тарифе Premium. Оформи подписку на вкладке «Тарифы».</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HISTORY ================= -->
+    <section class="view" id="view-history">
+      <h2 style="font-size:18px; margin-bottom:4px;">История</h2>
+      <div class="empty-state">
+        <div class="empty-ic">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 4v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Пока пусто</h3>
+        <p>Здесь появятся твои картинки, переводы и ответы чата — сгенерируй первую на вкладке «Создать».</p>
+      </div>
+    </section>
+
+    <!-- ================= TARIFFS ================= -->
+    <section class="view" id="view-tariffs">
+      <h2 style="font-size:18px; margin-bottom:14px;">Тарифы</h2>
+
+      <div class="plan-card">
+        <div class="plan-head">
+          <h3>🆓 Бесплатный</h3>
+          <div class="plan-price">0 ⭐</div>
+        </div>
+        <ul class="plan-features">
+          <li>✅ 100 запросов в неделю</li>
+          <li>✅ GPT-5.4 · Gemini 3 Flash · Claude Sonnet 5</li>
+          <li>🎨 25 генераций изображений в неделю</li>
+        </ul>
+        <button class="plan-cta" disabled style="opacity:.5; cursor:default;">Текущий тариф</button>
+      </div>
+
+      <div class="plan-card highlight">
+        <div class="plan-head">
+          <h3>💎 Premium · месяц</h3>
+          <div class="plan-price">600 ⭐<small>≈ 1 200 ₽</small></div>
+        </div>
+        <ul class="plan-features">
+          <li>✅ 100 запросов в день — в 7 раз больше</li>
+          <li>🧠 GPT-5.5 · Claude Opus 4.8 · Gemini 3.5 Flash</li>
+          <li>🎨 100 генераций изображений в месяц</li>
+          <li>📎 Работа с документами · 🎙 Голосовые ответы</li>
+        </ul>
+        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-head">
+          <h3>💎 Premium · 3 месяца</h3>
+          <div class="plan-price">1 200 ⭐<small>−33%</small></div>
+        </div>
+        <ul class="plan-features">
+          <li>✅ 200 запросов в день</li>
+          <li>🎨 350 генераций изображений за период</li>
+          <li>🌅 Видео из промпта · работа с презентациями</li>
+        </ul>
+        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-head">
+          <h3>👑 Premium · 6 месяцев</h3>
+          <div class="plan-price">1 990 ⭐<small>−45%</small></div>
+        </div>
+        <ul class="plan-features">
+          <li>♾️ Безлимитные запросы и картинки</li>
+          <li>📊 Безлимитные презентации</li>
+        </ul>
+        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-head">
+          <h3>👑 Premium · 12 месяцев</h3>
+          <div class="plan-price">3 250 ⭐<small>−55%</small></div>
+        </div>
+        <ul class="plan-features">
+          <li>♾️ Безлимитные запросы и картинки</li>
+          <li>💰 Максимальная выгода на весь год</li>
+        </ul>
+        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+      </div>
+    </section>
+
+    <!-- ================= PROFILE ================= -->
+    <section class="view" id="view-profile">
+      <div class="profile-banner">
+        <div class="ribbon"></div>
+        <div class="profile-row">
+          <div class="avatar">A</div>
+          <div>
+            <h2>Alex</h2>
+            <p>@alexname · Free тариф</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stats" style="margin-top:14px;">
+        <div class="stat-pill"><div class="n">73/100</div><div class="l">запросов</div></div>
+        <div class="stat-pill"><div class="n">18/25</div><div class="l">картинок</div></div>
+        <div class="stat-pill"><div class="n">0</div><div class="l">друзей</div></div>
+      </div>
+
+      <div class="list-group">
+        <div class="list-item" data-open="tariffs">
+          <div class="ic" style="background:var(--amber-soft); color:var(--amber);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 15l3-9 5 6 5-6 3 9H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="body"><h5>Подключить Premium</h5><span>Без лимитов на все модели</span></div>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="list-item">
+          <div class="ic" style="background:var(--mint-soft); color:var(--mint);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h6" stroke="currentColor" stroke-width="1.6"/><path d="M22 2l-9 9M14 2h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="body"><h5>Пригласить друзей</h5><span>+5 запросов за каждого</span></div>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <div class="section-title"><h2>Мои модели</h2></div>
+      <div class="list-group">
+        <div class="list-item">
+          <div class="ic" style="background:var(--violet-soft); color:var(--violet);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="body"><h5>Чат</h5><span>GPT-5.4 mini</span></div>
+          <span class="val">изменить</span>
+        </div>
+        <div class="list-item">
+          <div class="ic" style="background:var(--cyan-soft); color:var(--cyan);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/></svg>
+          </div>
+          <div class="body"><h5>Фото</h5><span>GPT Image 1.5</span></div>
+          <span class="val">изменить</span>
+        </div>
+      </div>
+
+      <div class="section-title"><h2>Язык интерфейса</h2></div>
+      <div class="lang-toggle">
+        <div class="lang-btn active" onclick="setLang(this)">🇷🇺 Русский</div>
+        <div class="lang-btn" onclick="setLang(this)">🇬🇧 English</div>
+      </div>
+
+      <div class="section-title"><h2>Поддержка</h2></div>
+      <div class="list-group">
+        <div class="list-item">
+          <div class="ic" style="background:var(--bg-surface-3); color:var(--text-muted);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2 1.8-2 3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16.6" r=".9" fill="currentColor"/></svg>
+          </div>
+          <div class="body"><h5>Связаться с поддержкой</h5><span>@gptnanosupport</span></div>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="list-item">
+          <div class="ic" style="background:var(--bg-surface-3); color:var(--text-muted);">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M7 3h10l4 4v14H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="body"><h5>Пользовательское соглашение</h5></div>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <p class="footnote">Aurora AI · v1.0</p>
+    </section>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <nav class="navbar">
+    <button class="nav-btn active" data-open="home">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+      Главная
+    </button>
+    <button class="nav-btn" data-open="create">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      Создать
+    </button>
+    <button class="nav-btn" data-open="history">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 4v-1M16 4v-1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      История
+    </button>
+    <button class="nav-btn" data-open="tariffs">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9.5h18" stroke="currentColor" stroke-width="1.7"/></svg>
+      Тарифы
+    </button>
+    <button class="nav-btn" data-open="profile">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 20c1.4-4 4-6 7.5-6s6.1 2 7.5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      Профиль
+    </button>
+  </nav>
+</div>
+
+<script>
+  try{ window.Telegram && Telegram.WebApp && Telegram.WebApp.ready() && Telegram.WebApp.expand(); }catch(e){}
+
+  function haptic(){ try{ Telegram.WebApp.HapticFeedback.impactOccurred('light'); }catch(e){} }
+
+  function openView(name){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+name).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.open===name));
+    document.querySelector('.views').scrollTop = 0;
+  }
+
+  function openTab(name){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+    document.querySelectorAll('.subpane').forEach(p=>p.classList.toggle('active', p.id==='tab-'+name));
+  }
+
+  document.querySelectorAll('[data-open]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      haptic();
+      openView(el.dataset.open);
+      if(el.dataset.tab) openTab(el.dataset.tab);
+    });
+  });
+
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click', ()=>{ haptic(); openTab(t.dataset.tab); });
+  });
+
+  document.querySelectorAll('.model-chip:not(.locked)').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const row = chip.parentElement;
+      row.querySelectorAll('.model-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.model-chip.locked').forEach(chip=>{
+    chip.addEventListener('click', ()=> showToast('Доступно на тарифе Premium'));
+  });
+
+  function selectStyle(el){
+    el.parentElement.querySelectorAll('.style-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function setLang(el){
+    el.parentElement.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  let toastTimer;
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+</script>
+</body>
+</html>
