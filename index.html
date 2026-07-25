@@ -215,7 +215,8 @@
     padding:5px 10px; border-radius:100px;
   }
 
-  .model-row{display:flex; gap:8px; margin-top:10px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none;}
+  .model-row{display:flex; gap:8px; margin-top:10px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; cursor:grab; user-select:none;}
+  .model-row.dragging{cursor:grabbing;}
   .model-row::-webkit-scrollbar{display:none;}
   .model-chip{
     flex-shrink:0; display:flex; align-items:center; gap:6px;
@@ -404,119 +405,119 @@
         <div class="hero-row">
           <div class="avatar">A</div>
           <div>
-            <p class="hero-greeting">С возвращением,</p>
+            <p class="hero-greeting" data-i18n="greeting">С возвращением,</p>
             <h2 class="hero-name" id="heroName">…</h2>
           </div>
         </div>
         <div class="hero-stats">
-          <div class="stat-pill"><div class="n" id="statReq">—</div><div class="l">запросов осталось</div></div>
-          <div class="stat-pill"><div class="n" id="statImg">—</div><div class="l">картинок осталось</div></div>
+          <div class="stat-pill"><div class="n" id="statReq">—</div><div class="l" data-i18n="requests_left">запросов осталось</div></div>
+          <div class="stat-pill"><div class="n" id="statImg">—</div><div class="l" data-i18n="images_left">картинок осталось</div></div>
         </div>
       </div>
 
-      <div class="section-title"><h2>Сейчас в фокусе</h2></div>
+      <div class="section-title"><h2 data-i18n="right_now">Сейчас в фокусе</h2></div>
       <div class="tool-hero" data-open="create" data-tab="chat">
         <div class="ic">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </div>
         <div>
-          <h3>Чат с ИИ</h3>
-          <p>GPT · Claude · Gemini — в одном окне</p>
+          <h3 data-i18n="chat_title">Чат с ИИ</h3>
+          <p data-i18n="chat_desc">GPT · Claude · Gemini — в одном окне</p>
         </div>
       </div>
 
       <div class="grid2">
         <div class="tool-card cyan" data-open="create" data-tab="image">
           <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="9" r="1.6" fill="currentColor"/><path d="M21 15l-5-5-9 9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
-          <h4>Генерация фото</h4>
-          <p>Nano Banana, GPT Image</p>
+          <h4 data-i18n="image_title">Генерация фото</h4>
+          <p data-i18n="image_desc">Nano Banana, GPT Image</p>
         </div>
         <div class="tool-card pink" data-open="create" data-tab="translate">
           <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 6h9M8 4v2.2C8 10 6 13 3 14.5M6 10c1 1.8 3 3 6 3.5M14 20l4-9 4 9M15.3 17h5.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <h4>Переводчик</h4>
-          <p>10 языков, 4 стиля</p>
+          <h4 data-i18n="translate_title">Переводчик</h4>
+          <p data-i18n="translate_desc">10 языков, 4 стиля</p>
         </div>
         <div class="tool-card mint" data-open="create" data-tab="docs">
           <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
-          <h4>Документы</h4>
-          <p>PDF, Word, Excel — премиум</p>
+          <h4 data-i18n="docs_title">Документы</h4>
+          <p data-i18n="docs_desc">PDF, Word, Excel — премиум</p>
         </div>
         <div class="tool-card amber" data-open="profile">
           <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 6.6 7.1.5-5.5 4.6 1.9 6.9L12 17l-6.1 3.6 1.9-6.9-5.5-4.6 7.1-.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
-          <h4>Пригласить</h4>
-          <p>+5 запросов за друга</p>
+          <h4 data-i18n="invite_title">Пригласить</h4>
+          <p data-i18n="invite_desc">+5 запросов за друга</p>
         </div>
       </div>
 
       <div class="plan-banner" data-open="tariffs">
         <div>
           <h4 id="planBannerTitle">Бесплатный тариф</h4>
-          <p>Подключи Premium — без лимитов</p>
+          <p data-i18n="plan_banner_desc">Подключи Premium — без лимитов</p>
         </div>
         <span class="badge-free" id="planBannerBadge">FREE</span>
       </div>
 
-      <div class="section-title"><h2>Текущие модели</h2><span class="see-all" data-open="create" data-tab="chat">все →</span></div>
+      <div class="section-title"><h2 id="txtCurrentModels" data-i18n="current_models">Текущие модели</h2><span class="see-all" style="cursor:pointer;" onclick="haptic(); openView('create'); openTab('chat');" data-i18n="see_all">все →</span></div>
       <div class="model-row" id="homeModelRow"></div>
     </section>
 
     <!-- ================= CREATE ================= -->
     <section class="view" id="view-create">
-      <h2 style="font-size:18px; margin-bottom:14px;">Создать</h2>
+      <h2 style="font-size:18px; margin-bottom:14px;" data-i18n="create_title">Создать</h2>
       <div class="tabs">
-        <div class="tab active" data-tab="chat">Чат</div>
-        <div class="tab" data-tab="image">Фото</div>
-        <div class="tab" data-tab="translate">Перевод</div>
-        <div class="tab" data-tab="docs">Документ</div>
+        <div class="tab active" data-tab="chat" data-i18n="tab_chat">Чат</div>
+        <div class="tab" data-tab="image" data-i18n="tab_image">Фото</div>
+        <div class="tab" data-tab="translate" data-i18n="tab_translate">Перевод</div>
+        <div class="tab" data-tab="docs" data-i18n="tab_docs">Документ</div>
       </div>
 
       <!-- CHAT -->
       <div class="subpane active" id="tab-chat">
-        <p class="field-label" style="margin-top:16px;">Модель</p>
+        <p class="field-label" style="margin-top:16px;" data-i18n="label_model">Модель</p>
         <div class="model-row" id="chatModelRow"></div>
         <div class="chat-window" id="chatWindow">
-          <div class="bubble bot">Привет! Спрашивай что угодно — отвечает выбранная модель.</div>
+          <div class="bubble bot" data-i18n="chat_hello">Привет! Спрашивай что угодно — отвечает выбранная модель.</div>
         </div>
         <div class="chat-input-row">
-          <input type="text" id="chatInput" placeholder="Напиши сообщение…" onkeydown="if(event.key==='Enter') sendChat();">
+          <input type="text" id="chatInput" placeholder="Напиши сообщение…" data-i18n-placeholder="chat_input_ph" onkeydown="if(event.key==='Enter') sendChat();">
           <button class="send-btn" id="chatSendBtn" onclick="sendChat()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
 
       <!-- IMAGE -->
       <div class="subpane" id="tab-image">
-        <p class="field-label" style="margin-top:16px;">Стиль</p>
+        <p class="field-label" style="margin-top:16px;" data-i18n="label_style">Стиль</p>
         <div class="style-grid" id="styleGrid"></div>
-        <p class="field-label">Промт</p>
-        <textarea rows="4" id="imagePrompt" placeholder="Опиши, что нарисовать…"></textarea>
-        <button class="btn-primary" id="imageGenBtn" onclick="generateImage()">Сгенерировать</button>
+        <p class="field-label" data-i18n="label_prompt">Промт</p>
+        <textarea rows="4" id="imagePrompt" placeholder="Опиши, что нарисовать…" data-i18n-placeholder="image_prompt_ph"></textarea>
+        <button class="btn-primary" id="imageGenBtn" onclick="generateImage()" data-i18n="btn_generate">Сгенерировать</button>
         <div id="imageResult"></div>
       </div>
 
       <!-- TRANSLATE -->
       <div class="subpane" id="tab-translate">
-        <p class="field-label" style="margin-top:16px;">Язык перевода</p>
+        <p class="field-label" style="margin-top:16px;" data-i18n="label_target_lang">Язык перевода</p>
         <div class="model-row" id="translateLangRow"></div>
-        <p class="field-label">Стиль</p>
+        <p class="field-label" data-i18n="label_style">Стиль</p>
         <div class="model-row" id="translateStyleRow"></div>
-        <p class="field-label">Текст</p>
-        <textarea rows="4" id="translateInput" placeholder="Вставь текст для перевода…"></textarea>
-        <button class="btn-primary" id="translateBtn" onclick="doTranslate()">Перевести</button>
+        <p class="field-label" data-i18n="label_text">Текст</p>
+        <textarea rows="4" id="translateInput" placeholder="Вставь текст для перевода…" data-i18n-placeholder="translate_input_ph"></textarea>
+        <button class="btn-primary" id="translateBtn" onclick="doTranslate()" data-i18n="btn_translate">Перевести</button>
         <div id="translateResult"></div>
       </div>
 
       <!-- DOCS -->
       <div class="subpane" id="tab-docs">
         <label class="dropzone" style="margin-top:16px; display:block; cursor:pointer;" id="dropzoneLabel">
-          <b id="dropzoneTitle">Отправь документ</b>
-          <span id="dropzoneHint">PDF, DOCX, CSV или Excel — задай вопрос по содержимому</span>
+          <b id="dropzoneTitle" data-i18n="dropzone_title">Отправь документ</b>
+          <span id="dropzoneHint" data-i18n="dropzone_hint">PDF, DOCX, CSV или Excel — задай вопрос по содержимому</span>
           <input type="file" id="docFile" accept=".pdf,.docx,.csv,.xlsx,.xls" style="display:none;" onchange="uploadDocument()">
         </label>
 
         <div id="docQA" style="display:none;">
-          <p class="field-label">Вопрос по документу</p>
+          <p class="field-label" data-i18n="label_doc_question">Вопрос по документу</p>
           <div class="chat-input-row">
-            <input type="text" id="docQuestion" placeholder="Например: о чём этот файл?" onkeydown="if(event.key==='Enter') askDocument();">
+            <input type="text" id="docQuestion" placeholder="Например: о чём этот файл?" data-i18n-placeholder="doc_question_ph" onkeydown="if(event.key==='Enter') askDocument();">
             <button class="send-btn" onclick="askDocument()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
           </div>
           <div id="docAnswer"></div>
@@ -524,26 +525,26 @@
 
         <div class="lock-note" id="docsLockNote" style="display:none;">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px;"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#EFD48A" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#EFD48A" stroke-width="1.6"/></svg>
-          <p>Работа с документами доступна на тарифе Premium. Оформи подписку на вкладке «Тарифы».</p>
+          <p data-i18n="docs_lock_note">Работа с документами доступна на тарифе Premium. Оформи подписку на вкладке «Тарифы».</p>
         </div>
       </div>
     </section>
 
     <!-- ================= HISTORY ================= -->
     <section class="view" id="view-history">
-      <h2 style="font-size:18px; margin-bottom:4px;">История</h2>
+      <h2 style="font-size:18px; margin-bottom:4px;" data-i18n="history_title">История</h2>
       <div class="empty-state">
         <div class="empty-ic">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 4v5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h3>Пока пусто</h3>
-        <p>Здесь появятся твои картинки, переводы и ответы чата — сгенерируй первую на вкладке «Создать».</p>
+        <h3 data-i18n="empty_title">Пока пусто</h3>
+        <p data-i18n="empty_desc">Здесь появятся твои картинки, переводы и ответы чата — сгенерируй первую на вкладке «Создать».</p>
       </div>
     </section>
 
     <!-- ================= TARIFFS ================= -->
     <section class="view" id="view-tariffs">
-      <h2 style="font-size:18px; margin-bottom:14px;">Тарифы</h2>
+      <h2 style="font-size:18px; margin-bottom:14px;" data-i18n="tariffs_title">Тарифы</h2>
 
       <div class="plan-card">
         <div class="plan-head">
@@ -555,10 +556,10 @@
           <li>✅ GPT-5.4 · Gemini 3 Flash · Claude Sonnet 5</li>
           <li>🎨 25 генераций изображений в неделю</li>
         </ul>
-        <button class="plan-cta" disabled style="opacity:.5; cursor:default;">Текущий тариф</button>
+        <button class="plan-cta" disabled style="opacity:.5; cursor:default;" data-i18n="btn_current_plan">Текущий тариф</button>
       </div>
 
-      <div class="plan-card highlight">
+      <div class="plan-card">
         <div class="plan-head">
           <h3>💎 Premium · месяц</h3>
           <div class="plan-price">600 ⭐<small>≈ 1 200 ₽</small></div>
@@ -569,10 +570,10 @@
           <li>🎨 100 генераций изображений в месяц</li>
           <li>📎 Работа с документами · 🎙 Голосовые ответы</li>
         </ul>
-        <button class="plan-cta" onclick="buyPlan('month')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('month')" data-i18n="btn_subscribe">Оформить</button>
       </div>
 
-      <div class="plan-card">
+      <div class="plan-card highlight">
         <div class="plan-head">
           <h3>💎 Premium · 3 месяца</h3>
           <div class="plan-price">1 200 ⭐<small>−33%</small></div>
@@ -582,7 +583,7 @@
           <li>🎨 350 генераций изображений за период</li>
           <li>🌅 Видео из промпта · работа с презентациями</li>
         </ul>
-        <button class="plan-cta" onclick="buyPlan('3month')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('3month')" data-i18n="btn_subscribe">Оформить</button>
       </div>
 
       <div class="plan-card">
@@ -594,7 +595,7 @@
           <li>♾️ Безлимитные запросы и картинки</li>
           <li>📊 Безлимитные презентации</li>
         </ul>
-        <button class="plan-cta" onclick="buyPlan('6month')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('6month')" data-i18n="btn_subscribe">Оформить</button>
       </div>
 
       <div class="plan-card">
@@ -606,7 +607,7 @@
           <li>♾️ Безлимитные запросы и картинки</li>
           <li>💰 Максимальная выгода на весь год</li>
         </ul>
-        <button class="plan-cta" onclick="buyPlan('year')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('year')" data-i18n="btn_subscribe">Оформить</button>
       </div>
     </section>
 
@@ -626,7 +627,7 @@
       <div class="hero-stats" style="margin-top:14px;">
         <div class="stat-pill"><div class="n" id="profReq">—</div><div class="l">запросов</div></div>
         <div class="stat-pill"><div class="n" id="profImg">—</div><div class="l">картинок</div></div>
-        <div class="stat-pill"><div class="n" id="profFriends">—</div><div class="l">друзей</div></div>
+        <div class="stat-pill"><div class="n" id="profFriends">—</div><div class="l" data-i18n="friends">друзей</div></div>
       </div>
 
       <div class="list-group">
@@ -634,49 +635,49 @@
           <div class="ic" style="background:var(--amber-soft); color:var(--amber);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 15l3-9 5 6 5-6 3 9H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
           </div>
-          <div class="body"><h5>Подключить Premium</h5><span>Без лимитов на все модели</span></div>
+          <div class="body"><h5 data-i18n="connect_premium">Подключить Premium</h5><span data-i18n="no_limits">Без лимитов на все модели</span></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
         <div class="list-item" onclick="shareReferral()">
           <div class="ic" style="background:var(--mint-soft); color:var(--mint);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h6" stroke="currentColor" stroke-width="1.6"/><path d="M22 2l-9 9M14 2h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <div class="body"><h5>Пригласить друзей</h5><span>+5 запросов за каждого · нажми, чтобы скопировать ссылку</span></div>
+          <div class="body"><h5 data-i18n="invite_friends">Пригласить друзей</h5><span data-i18n="invite_friends_desc">+5 запросов за каждого · нажми, чтобы скопировать ссылку</span></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
       </div>
 
-      <div class="section-title"><h2>Мои модели</h2></div>
+      <div class="section-title"><h2 data-i18n="my_models">Мои модели</h2></div>
       <div class="list-group">
         <div class="list-item" data-open="create" data-tab="chat">
           <div class="ic" style="background:var(--violet-soft); color:var(--violet);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
           </div>
-          <div class="body"><h5>Чат</h5><span id="profChatModel">…</span></div>
-          <span class="val">изменить</span>
+          <div class="body"><h5 data-i18n="tab_chat">Чат</h5><span id="profChatModel">…</span></div>
+          <span class="val" data-i18n="change">изменить</span>
         </div>
       </div>
 
-      <div class="section-title"><h2>Язык интерфейса</h2></div>
+      <div class="section-title"><h2 data-i18n="interface_language">Язык интерфейса</h2></div>
       <div class="lang-toggle">
         <div class="lang-btn" id="langBtnRu" onclick="setLang(this,'ru')">🇷🇺 Русский</div>
         <div class="lang-btn" id="langBtnEn" onclick="setLang(this,'en')">🇬🇧 English</div>
       </div>
 
-      <div class="section-title"><h2>Поддержка</h2></div>
+      <div class="section-title"><h2 data-i18n="support">Поддержка</h2></div>
       <div class="list-group">
         <div class="list-item" id="supportItem">
           <div class="ic" style="background:var(--bg-surface-3); color:var(--text-muted);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2 1.8-2 3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16.6" r=".9" fill="currentColor"/></svg>
           </div>
-          <div class="body"><h5>Связаться с поддержкой</h5><span id="supportContact">…</span></div>
+          <div class="body"><h5 data-i18n="contact_support">Связаться с поддержкой</h5><span id="supportContact">…</span></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
         <div class="list-item">
           <div class="ic" style="background:var(--bg-surface-3); color:var(--text-muted);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M7 3h10l4 4v14H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
           </div>
-          <div class="body"><h5>Пользовательское соглашение</h5></div>
+          <div class="body"><h5 data-i18n="terms">Пользовательское соглашение</h5></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
       </div>
@@ -691,23 +692,23 @@
   <nav class="navbar">
     <button class="nav-btn active" data-open="home">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
-      Главная
+      <span data-i18n="nav_home">Главная</span>
     </button>
     <button class="nav-btn" data-open="create">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-      Создать
+      <span data-i18n="nav_create">Создать</span>
     </button>
     <button class="nav-btn" data-open="history">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 4v-1M16 4v-1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-      История
+      <span data-i18n="nav_history">История</span>
     </button>
     <button class="nav-btn" data-open="tariffs">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9.5h18" stroke="currentColor" stroke-width="1.7"/></svg>
-      Тарифы
+      <span data-i18n="nav_tariffs">Тарифы</span>
     </button>
     <button class="nav-btn" data-open="profile">
       <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.7"/><path d="M4.5 20c1.4-4 4-6 7.5-6s6.1 2 7.5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-      Профиль
+      <span data-i18n="nav_profile">Профиль</span>
     </button>
   </nav>
 </div>
@@ -721,6 +722,109 @@
 
   let selectedImageStyle = 'gpt_standard';
   let profileCache = null;
+
+  // ---------- горизонтальная прокрутка мышью на ПК ----------
+  function enableMouseScroll(el){
+    if (!el || el.dataset.mouseScrollBound) return;
+    el.dataset.mouseScrollBound = '1';
+
+    el.addEventListener('wheel', (e)=>{
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        el.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, {passive:false});
+
+    let isDown = false, startX = 0, startScroll = 0;
+    el.addEventListener('mousedown', (e)=>{
+      isDown = true;
+      el.classList.add('dragging');
+      startX = e.pageX;
+      startScroll = el.scrollLeft;
+    });
+    window.addEventListener('mouseup', ()=>{ isDown = false; el.classList.remove('dragging'); });
+    window.addEventListener('mousemove', (e)=>{
+      if (!isDown) return;
+      el.scrollLeft = startScroll - (e.pageX - startX);
+    });
+  }
+
+  function enableMouseScrollAll(){
+    document.querySelectorAll('.model-row').forEach(enableMouseScroll);
+  }
+
+  // ---------- перевод статичного интерфейса ----------
+  const I18N = {
+    ru: {
+      greeting:'С возвращением,', requests_left:'запросов осталось', images_left:'картинок осталось',
+      right_now:'Сейчас в фокусе', chat_title:'Чат с ИИ', chat_desc:'GPT · Claude · Gemini — в одном окне',
+      image_title:'Генерация фото', image_desc:'Nano Banana, GPT Image',
+      translate_title:'Переводчик', translate_desc:'10 языков, 4 стиля',
+      docs_title:'Документы', docs_desc:'PDF, Word, Excel — премиум',
+      invite_title:'Пригласить', invite_desc:'+5 запросов за друга',
+      plan_banner_desc:'Подключи Premium — без лимитов',
+      current_models:'Текущие модели', see_all:'все →',
+      create_title:'Создать', tab_chat:'Чат', tab_image:'Фото', tab_translate:'Перевод', tab_docs:'Документ',
+      label_model:'Модель', label_style:'Стиль', label_prompt:'Промт', label_target_lang:'Язык перевода',
+      label_text:'Текст', label_doc_question:'Вопрос по документу',
+      chat_hello:'Привет! Спрашивай что угодно — отвечает выбранная модель.',
+      chat_input_ph:'Напиши сообщение…', image_prompt_ph:'Опиши, что нарисовать…',
+      translate_input_ph:'Вставь текст для перевода…', doc_question_ph:'Например: о чём этот файл?',
+      btn_generate:'Сгенерировать', btn_translate:'Перевести', generating:'Генерирую…',
+      dropzone_title:'Отправь документ', dropzone_hint:'PDF, DOCX, CSV или Excel — задай вопрос по содержимому',
+      docs_lock_note:'Работа с документами доступна на тарифе Premium. Оформи подписку на вкладке «Тарифы».',
+      history_title:'История', empty_title:'Пока пусто',
+      empty_desc:'Здесь появятся твои картинки, переводы и ответы чата — сгенерируй первую на вкладке «Создать».',
+      tariffs_title:'Тарифы', btn_current_plan:'Текущий тариф', btn_subscribe:'Оформить',
+      friends:'друзей', connect_premium:'Подключить Premium', no_limits:'Без лимитов на все модели',
+      invite_friends:'Пригласить друзей', invite_friends_desc:'+5 запросов за каждого · нажми, чтобы скопировать ссылку',
+      my_models:'Мои модели', change:'изменить', interface_language:'Язык интерфейса',
+      support:'Поддержка', contact_support:'Связаться с поддержкой', terms:'Пользовательское соглашение',
+      nav_home:'Главная', nav_create:'Создать', nav_history:'История', nav_tariffs:'Тарифы', nav_profile:'Профиль',
+    },
+    en: {
+      greeting:'Welcome back,', requests_left:'requests left', images_left:'images left',
+      right_now:'Right now', chat_title:'Chat with AI', chat_desc:'GPT · Claude · Gemini — in one window',
+      image_title:'Image generation', image_desc:'Nano Banana, GPT Image',
+      translate_title:'Translator', translate_desc:'10 languages, 4 styles',
+      docs_title:'Documents', docs_desc:'PDF, Word, Excel — premium',
+      invite_title:'Invite', invite_desc:'+5 requests per friend',
+      plan_banner_desc:'Get Premium — no limits',
+      current_models:'Current models', see_all:'all →',
+      create_title:'Create', tab_chat:'Chat', tab_image:'Photo', tab_translate:'Translate', tab_docs:'Document',
+      label_model:'Model', label_style:'Style', label_prompt:'Prompt', label_target_lang:'Target language',
+      label_text:'Text', label_doc_question:'Question about the document',
+      chat_hello:'Hi! Ask anything — the selected model will answer.',
+      chat_input_ph:'Write a message…', image_prompt_ph:'Describe what to draw…',
+      translate_input_ph:'Paste text to translate…', doc_question_ph:'E.g. what is this file about?',
+      btn_generate:'Generate', btn_translate:'Translate', generating:'Generating…',
+      dropzone_title:'Send a document', dropzone_hint:'PDF, DOCX, CSV or Excel — ask a question about it',
+      docs_lock_note:'Document Q&A is available with Premium. Subscribe on the Plans tab.',
+      history_title:'History', empty_title:'Nothing yet',
+      empty_desc:'Your images, translations and chat answers will appear here — generate your first one in Create.',
+      tariffs_title:'Plans', btn_current_plan:'Current plan', btn_subscribe:'Subscribe',
+      friends:'friends', connect_premium:'Get Premium', no_limits:'No limits on any model',
+      invite_friends:'Invite friends', invite_friends_desc:'+5 requests per friend · tap to copy the link',
+      my_models:'My models', change:'change', interface_language:'Interface language',
+      support:'Support', contact_support:'Contact support', terms:'Terms of use',
+      nav_home:'Home', nav_create:'Create', nav_history:'History', nav_tariffs:'Plans', nav_profile:'Profile',
+    },
+  };
+
+  function applyI18n(lang){
+    const dict = I18N[lang] || I18N.ru;
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.dataset.i18n;
+      if (dict[key]) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+      const key = el.dataset.i18nPlaceholder;
+      if (dict[key]) el.placeholder = dict[key];
+    });
+    // текст генерации картинки — хранится не как data-i18n (меняется в процессе)
+    const genBtn = document.getElementById('imageGenBtn');
+    if (genBtn) genBtn.dataset.labelIdle = dict.btn_generate;
+  }
 
   // ---------- навигация ----------
   function haptic(){ try{ Telegram.WebApp.HapticFeedback.impactOccurred('light'); }catch(e){} }
@@ -810,6 +914,7 @@
 
     document.getElementById('langBtnRu').classList.toggle('active', p.language === 'ru');
     document.getElementById('langBtnEn').classList.toggle('active', p.language === 'en');
+    applyI18n(p.language);
 
     document.getElementById('docsLockNote').style.display = p.documents_allowed ? 'none' : 'flex';
     document.getElementById('dropzoneLabel').style.opacity = p.documents_allowed ? '1' : '.4';
@@ -913,7 +1018,7 @@
     const btn = document.getElementById('imageGenBtn');
     const result = document.getElementById('imageResult');
     btn.disabled = true;
-    btn.textContent = 'Генерирую…';
+    btn.textContent = I18N[document.getElementById('langBtnEn').classList.contains('active') ? 'en' : 'ru'].generating;
     result.innerHTML = '';
     try {
       const data = await api('/api/image', {method:'POST', json:{prompt, style: selectedImageStyle}});
@@ -921,7 +1026,7 @@
       loadProfile();
     } catch(e) { /* тост уже показан */ }
     btn.disabled = false;
-    btn.textContent = 'Сгенерировать';
+    btn.textContent = btn.dataset.labelIdle || 'Сгенерировать';
   }
 
   // ---------- перевод ----------
@@ -1011,6 +1116,7 @@
   async function setLang(el, lang){
     document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
     el.classList.add('active');
+    applyI18n(lang);
     try { await api('/api/language', {method:'POST', json:{lang}}); } catch(e){ return; }
     loadProfile();
   }
@@ -1029,6 +1135,7 @@
     loadProfile();
     loadModels();
     loadTranslateOptions();
+    enableMouseScrollAll();
   }
 
   init();
