@@ -392,7 +392,7 @@
       <div class="brand-mark"></div>
       <span class="brand-name">Aurora AI</span>
     </div>
-    <div class="plan-chip"><span class="dot"></span>Free · неделя</div>
+    <div class="plan-chip" id="planChip"><span class="dot"></span><span id="planChipText">…</span></div>
   </div>
 
   <div class="views">
@@ -405,12 +405,12 @@
           <div class="avatar">A</div>
           <div>
             <p class="hero-greeting">С возвращением,</p>
-            <h2 class="hero-name">Alex</h2>
+            <h2 class="hero-name" id="heroName">…</h2>
           </div>
         </div>
         <div class="hero-stats">
-          <div class="stat-pill"><div class="n">73/100</div><div class="l">запросов на неделе</div></div>
-          <div class="stat-pill"><div class="n">18/25</div><div class="l">картинок на неделе</div></div>
+          <div class="stat-pill"><div class="n" id="statReq">—</div><div class="l">запросов осталось</div></div>
+          <div class="stat-pill"><div class="n" id="statImg">—</div><div class="l">картинок осталось</div></div>
         </div>
       </div>
 
@@ -450,19 +450,14 @@
 
       <div class="plan-banner" data-open="tariffs">
         <div>
-          <h4>Бесплатный тариф</h4>
+          <h4 id="planBannerTitle">Бесплатный тариф</h4>
           <p>Подключи Premium — без лимитов</p>
         </div>
-        <span class="badge-free">FREE</span>
+        <span class="badge-free" id="planBannerBadge">FREE</span>
       </div>
 
       <div class="section-title"><h2>Текущие модели</h2><span class="see-all" data-open="create" data-tab="chat">все →</span></div>
-      <div class="model-row">
-        <div class="model-chip active"><span class="dot"></span>GPT-5.4 mini</div>
-        <div class="model-chip"><span class="dot"></span>Claude Sonnet 5</div>
-        <div class="model-chip"><span class="dot"></span>Gemini 3 Flash</div>
-        <div class="model-chip locked"><span class="dot"></span>🔒 Claude Opus 4.8</div>
-      </div>
+      <div class="model-row" id="homeModelRow"></div>
     </section>
 
     <!-- ================= CREATE ================= -->
@@ -478,73 +473,56 @@
       <!-- CHAT -->
       <div class="subpane active" id="tab-chat">
         <p class="field-label" style="margin-top:16px;">Модель</p>
-        <div class="model-row">
-          <div class="model-chip active"><span class="dot"></span>GPT-5.4 mini ⚡</div>
-          <div class="model-chip"><span class="dot"></span>Claude Sonnet 5 🎭</div>
-          <div class="model-chip"><span class="dot"></span>Gemini 3 Flash 💎</div>
-          <div class="model-chip locked"><span class="dot"></span>🔒 GPT-5.5</div>
-        </div>
-        <div class="chat-window">
-          <div class="bubble user">Сократи это письмо до трёх предложений</div>
-          <div class="bubble bot">Готово — вот сжатая версия, сохранил основную просьбу и дедлайн в конце сообщения.</div>
+        <div class="model-row" id="chatModelRow"></div>
+        <div class="chat-window" id="chatWindow">
+          <div class="bubble bot">Привет! Спрашивай что угодно — отвечает выбранная модель.</div>
         </div>
         <div class="chat-input-row">
-          <input type="text" placeholder="Напиши сообщение…">
-          <button class="send-btn" onclick="showToast('Демо-режим: подключим к боту позже')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
+          <input type="text" id="chatInput" placeholder="Напиши сообщение…" onkeydown="if(event.key==='Enter') sendChat();">
+          <button class="send-btn" id="chatSendBtn" onclick="sendChat()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
 
       <!-- IMAGE -->
       <div class="subpane" id="tab-image">
         <p class="field-label" style="margin-top:16px;">Стиль</p>
-        <div class="style-grid">
-          <div class="style-card selected" onclick="selectStyle(this)">
-            <h5>GPT Standard</h5>
-            <p>Без доп. модификаторов</p>
-          </div>
-          <div class="style-card" onclick="selectStyle(this)">
-            <h5>Nano Banana 🍌</h5>
-            <p>Кинематографичный свет</p>
-          </div>
-        </div>
-        <p class="field-label">Модель</p>
-        <div class="model-row">
-          <div class="model-chip active"><span class="dot"></span>GPT Image 1.5</div>
-          <div class="model-chip locked"><span class="dot"></span>🔒 Flux Kontext Pro</div>
-          <div class="model-chip locked"><span class="dot"></span>🔒 Gemini 3 Pro Image</div>
-        </div>
+        <div class="style-grid" id="styleGrid"></div>
         <p class="field-label">Промт</p>
-        <textarea rows="4" placeholder="Опиши, что нарисовать…"></textarea>
-        <button class="btn-primary" onclick="showToast('Демо-режим: генерация появится после интеграции')">Сгенерировать</button>
+        <textarea rows="4" id="imagePrompt" placeholder="Опиши, что нарисовать…"></textarea>
+        <button class="btn-primary" id="imageGenBtn" onclick="generateImage()">Сгенерировать</button>
+        <div id="imageResult"></div>
       </div>
 
       <!-- TRANSLATE -->
       <div class="subpane" id="tab-translate">
         <p class="field-label" style="margin-top:16px;">Язык перевода</p>
-        <div class="model-row">
-          <div class="model-chip active"><span class="dot"></span>🇬🇧 English</div>
-          <div class="model-chip"><span class="dot"></span>🇩🇪 Deutsch</div>
-          <div class="model-chip"><span class="dot"></span>🇨🇳 中文</div>
-          <div class="model-chip"><span class="dot"></span>🇹🇷 Türkçe</div>
-        </div>
+        <div class="model-row" id="translateLangRow"></div>
         <p class="field-label">Стиль</p>
-        <div class="model-row">
-          <div class="model-chip active"><span class="dot"></span>Дружеский</div>
-          <div class="model-chip"><span class="dot"></span>Деловой</div>
-          <div class="model-chip"><span class="dot"></span>Формальный</div>
-        </div>
+        <div class="model-row" id="translateStyleRow"></div>
         <p class="field-label">Текст</p>
-        <textarea rows="4" placeholder="Вставь текст для перевода…"></textarea>
-        <button class="btn-primary" onclick="showToast('Демо-режим: перевод появится после интеграции')">Перевести</button>
+        <textarea rows="4" id="translateInput" placeholder="Вставь текст для перевода…"></textarea>
+        <button class="btn-primary" id="translateBtn" onclick="doTranslate()">Перевести</button>
+        <div id="translateResult"></div>
       </div>
 
       <!-- DOCS -->
       <div class="subpane" id="tab-docs">
-        <div class="dropzone" style="margin-top:16px;">
-          <b>Отправь документ</b>
-          PDF, DOCX, CSV или Excel — задай вопрос по содержимому
+        <label class="dropzone" style="margin-top:16px; display:block; cursor:pointer;" id="dropzoneLabel">
+          <b id="dropzoneTitle">Отправь документ</b>
+          <span id="dropzoneHint">PDF, DOCX, CSV или Excel — задай вопрос по содержимому</span>
+          <input type="file" id="docFile" accept=".pdf,.docx,.csv,.xlsx,.xls" style="display:none;" onchange="uploadDocument()">
+        </label>
+
+        <div id="docQA" style="display:none;">
+          <p class="field-label">Вопрос по документу</p>
+          <div class="chat-input-row">
+            <input type="text" id="docQuestion" placeholder="Например: о чём этот файл?" onkeydown="if(event.key==='Enter') askDocument();">
+            <button class="send-btn" onclick="askDocument()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
+          </div>
+          <div id="docAnswer"></div>
         </div>
-        <div class="lock-note">
+
+        <div class="lock-note" id="docsLockNote" style="display:none;">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px;"><rect x="5" y="10" width="14" height="10" rx="2" stroke="#EFD48A" stroke-width="1.6"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#EFD48A" stroke-width="1.6"/></svg>
           <p>Работа с документами доступна на тарифе Premium. Оформи подписку на вкладке «Тарифы».</p>
         </div>
@@ -591,7 +569,7 @@
           <li>🎨 100 генераций изображений в месяц</li>
           <li>📎 Работа с документами · 🎙 Голосовые ответы</li>
         </ul>
-        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('month')">Оформить</button>
       </div>
 
       <div class="plan-card">
@@ -604,7 +582,7 @@
           <li>🎨 350 генераций изображений за период</li>
           <li>🌅 Видео из промпта · работа с презентациями</li>
         </ul>
-        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('3month')">Оформить</button>
       </div>
 
       <div class="plan-card">
@@ -616,7 +594,7 @@
           <li>♾️ Безлимитные запросы и картинки</li>
           <li>📊 Безлимитные презентации</li>
         </ul>
-        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('6month')">Оформить</button>
       </div>
 
       <div class="plan-card">
@@ -628,7 +606,7 @@
           <li>♾️ Безлимитные запросы и картинки</li>
           <li>💰 Максимальная выгода на весь год</li>
         </ul>
-        <button class="plan-cta" onclick="showToast('Оплата через Telegram Stars появится после интеграции')">Оформить</button>
+        <button class="plan-cta" onclick="buyPlan('year')">Оформить</button>
       </div>
     </section>
 
@@ -637,18 +615,18 @@
       <div class="profile-banner">
         <div class="ribbon"></div>
         <div class="profile-row">
-          <div class="avatar">A</div>
+          <div class="avatar" id="profAvatar">…</div>
           <div>
-            <h2>Alex</h2>
-            <p>@alexname · Free тариф</p>
+            <h2 id="profName">…</h2>
+            <p id="profSub">…</p>
           </div>
         </div>
       </div>
 
       <div class="hero-stats" style="margin-top:14px;">
-        <div class="stat-pill"><div class="n">73/100</div><div class="l">запросов</div></div>
-        <div class="stat-pill"><div class="n">18/25</div><div class="l">картинок</div></div>
-        <div class="stat-pill"><div class="n">0</div><div class="l">друзей</div></div>
+        <div class="stat-pill"><div class="n" id="profReq">—</div><div class="l">запросов</div></div>
+        <div class="stat-pill"><div class="n" id="profImg">—</div><div class="l">картинок</div></div>
+        <div class="stat-pill"><div class="n" id="profFriends">—</div><div class="l">друзей</div></div>
       </div>
 
       <div class="list-group">
@@ -659,46 +637,39 @@
           <div class="body"><h5>Подключить Premium</h5><span>Без лимитов на все модели</span></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
-        <div class="list-item">
+        <div class="list-item" onclick="shareReferral()">
           <div class="ic" style="background:var(--mint-soft); color:var(--mint);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h6" stroke="currentColor" stroke-width="1.6"/><path d="M22 2l-9 9M14 2h8v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
-          <div class="body"><h5>Пригласить друзей</h5><span>+5 запросов за каждого</span></div>
+          <div class="body"><h5>Пригласить друзей</h5><span>+5 запросов за каждого · нажми, чтобы скопировать ссылку</span></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
       </div>
 
       <div class="section-title"><h2>Мои модели</h2></div>
       <div class="list-group">
-        <div class="list-item">
+        <div class="list-item" data-open="create" data-tab="chat">
           <div class="ic" style="background:var(--violet-soft); color:var(--violet);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
           </div>
-          <div class="body"><h5>Чат</h5><span>GPT-5.4 mini</span></div>
-          <span class="val">изменить</span>
-        </div>
-        <div class="list-item">
-          <div class="ic" style="background:var(--cyan-soft); color:var(--cyan);">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/></svg>
-          </div>
-          <div class="body"><h5>Фото</h5><span>GPT Image 1.5</span></div>
+          <div class="body"><h5>Чат</h5><span id="profChatModel">…</span></div>
           <span class="val">изменить</span>
         </div>
       </div>
 
       <div class="section-title"><h2>Язык интерфейса</h2></div>
       <div class="lang-toggle">
-        <div class="lang-btn active" onclick="setLang(this)">🇷🇺 Русский</div>
-        <div class="lang-btn" onclick="setLang(this)">🇬🇧 English</div>
+        <div class="lang-btn" id="langBtnRu" onclick="setLang(this,'ru')">🇷🇺 Русский</div>
+        <div class="lang-btn" id="langBtnEn" onclick="setLang(this,'en')">🇬🇧 English</div>
       </div>
 
       <div class="section-title"><h2>Поддержка</h2></div>
       <div class="list-group">
-        <div class="list-item">
+        <div class="list-item" id="supportItem">
           <div class="ic" style="background:var(--bg-surface-3); color:var(--text-muted);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2 1.8-2 3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16.6" r=".9" fill="currentColor"/></svg>
           </div>
-          <div class="body"><h5>Связаться с поддержкой</h5><span>@gptnanosupport</span></div>
+          <div class="body"><h5>Связаться с поддержкой</h5><span id="supportContact">…</span></div>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
         <div class="list-item">
@@ -744,6 +715,14 @@
 <script>
   try{ window.Telegram && Telegram.WebApp && Telegram.WebApp.ready() && Telegram.WebApp.expand(); }catch(e){}
 
+  // Адрес API передаёт бот в ссылке кнопки: ...?api=https://твой-туннель-или-домен
+  const API_BASE = new URLSearchParams(location.search).get('api') || '';
+  const initData = (window.Telegram && Telegram.WebApp && Telegram.WebApp.initData) || '';
+
+  let selectedImageStyle = 'gpt_standard';
+  let profileCache = null;
+
+  // ---------- навигация ----------
   function haptic(){ try{ Telegram.WebApp.HapticFeedback.impactOccurred('light'); }catch(e){} }
 
   function openView(name){
@@ -770,27 +749,6 @@
     t.addEventListener('click', ()=>{ haptic(); openTab(t.dataset.tab); });
   });
 
-  document.querySelectorAll('.model-chip:not(.locked)').forEach(chip=>{
-    chip.addEventListener('click', ()=>{
-      const row = chip.parentElement;
-      row.querySelectorAll('.model-chip').forEach(c=>c.classList.remove('active'));
-      chip.classList.add('active');
-    });
-  });
-  document.querySelectorAll('.model-chip.locked').forEach(chip=>{
-    chip.addEventListener('click', ()=> showToast('Доступно на тарифе Premium'));
-  });
-
-  function selectStyle(el){
-    el.parentElement.querySelectorAll('.style-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  function setLang(el){
-    el.parentElement.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-  }
-
   let toastTimer;
   function showToast(msg){
     const t = document.getElementById('toast');
@@ -799,6 +757,277 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
   }
+
+  // ---------- обёртка над fetch ----------
+  async function api(path, options = {}) {
+    if (!API_BASE) {
+      showToast('API не настроен — открой приложение через кнопку в боте');
+      throw new Error('no_api_base');
+    }
+    const res = await fetch(API_BASE + path, {
+      method: options.method || 'GET',
+      headers: Object.assign({'X-Telegram-Init-Data': initData}, options.json ? {'Content-Type': 'application/json'} : {}),
+      body: options.json ? JSON.stringify(options.json) : options.body,
+    });
+    let data = null;
+    try { data = await res.json(); } catch(e) {}
+    if (!res.ok) {
+      const msg = (data && data.message) || 'Что-то пошло не так';
+      showToast(msg);
+      throw new Error((data && data.error) || 'request_failed');
+    }
+    return data;
+  }
+
+  function fmtLeft(left, limit){
+    if (limit === null || limit === undefined) return '∞';
+    return `${left}/${limit}`;
+  }
+
+  // ---------- профиль ----------
+  async function loadProfile(){
+    let p;
+    try { p = await api('/api/profile'); } catch(e){ return; }
+    profileCache = p;
+
+    document.getElementById('planChipText').textContent = p.plan_title;
+    document.getElementById('heroName').textContent = p.name;
+    document.getElementById('statReq').textContent = fmtLeft(p.requests_left, p.requests_limit);
+    document.getElementById('statImg').textContent = fmtLeft(p.images_left, p.images_limit);
+    document.getElementById('planBannerTitle').textContent = p.plan_title;
+    document.getElementById('planBannerBadge').textContent = p.is_premium ? 'PRO' : 'FREE';
+
+    document.getElementById('profAvatar').textContent = (p.name || '?').charAt(0).toUpperCase();
+    document.getElementById('profName').textContent = p.name;
+    document.getElementById('profSub').textContent = (p.username ? '@'+p.username+' · ' : '') + p.plan_title;
+    document.getElementById('profReq').textContent = fmtLeft(p.requests_left, p.requests_limit);
+    document.getElementById('profImg').textContent = fmtLeft(p.images_left, p.images_limit);
+    document.getElementById('profFriends').textContent = p.referral_count;
+    document.getElementById('supportContact').textContent = p.support_contact;
+
+    document.getElementById('langBtnRu').classList.toggle('active', p.language === 'ru');
+    document.getElementById('langBtnEn').classList.toggle('active', p.language === 'en');
+
+    document.getElementById('docsLockNote').style.display = p.documents_allowed ? 'none' : 'flex';
+    document.getElementById('dropzoneLabel').style.opacity = p.documents_allowed ? '1' : '.4';
+    document.getElementById('dropzoneLabel').style.pointerEvents = p.documents_allowed ? 'auto' : 'none';
+  }
+
+  document.getElementById('supportItem').addEventListener('click', ()=>{
+    if (!profileCache) return;
+    try { Telegram.WebApp.openTelegramLink('https://t.me/' + profileCache.support_contact.replace('@','')); }
+    catch(e){ showToast(profileCache.support_contact); }
+  });
+
+  // ---------- модели ----------
+  function renderModelChip(m){
+    const locked = m.premium_only && !m.allowed;
+    const cls = 'model-chip' + (m.selected ? ' active' : '') + (locked ? ' locked' : '');
+    const label = locked ? `🔒 ${m.title}` : m.title;
+    return `<div class="${cls}" onclick="${locked ? `showToast('Доступно на тарифе Premium')` : `selectChatModel('${m.key}')`}"><span class="dot"></span>${label}</div>`;
+  }
+
+  async function loadModels(){
+    let data;
+    try { data = await api('/api/models'); } catch(e){ return; }
+
+    const chipsHtml = data.chat_models.map(renderModelChip).join('');
+    document.getElementById('homeModelRow').innerHTML = chipsHtml;
+    document.getElementById('chatModelRow').innerHTML = chipsHtml;
+
+    const current = data.chat_models.find(m => m.selected);
+    if (current) document.getElementById('profChatModel').textContent = current.title;
+
+    document.getElementById('styleGrid').innerHTML = data.image_styles.map(s => `
+      <div class="style-card ${s.key === selectedImageStyle ? 'selected' : ''}" onclick="selectImageStyle('${s.key}')">
+        <h5>${s.title}</h5>
+        <p>${s.description}</p>
+      </div>
+    `).join('');
+  }
+
+  async function selectChatModel(key){
+    haptic();
+    try { await api('/api/model', {method:'POST', json:{model:key}}); }
+    catch(e){ return; }
+    await loadModels();
+  }
+
+  function selectImageStyle(key){
+    selectedImageStyle = key;
+    document.querySelectorAll('#styleGrid .style-card').forEach((c,i)=>{});
+    loadModels();
+  }
+
+  // ---------- перевод: языки/стили ----------
+  let selectedTargetLang = 'en';
+  let selectedTranslateStyle = 'friendly';
+
+  async function loadTranslateOptions(){
+    let data;
+    try { data = await api('/api/translate/options'); } catch(e){ return; }
+
+    document.getElementById('translateLangRow').innerHTML = data.languages.map(l => `
+      <div class="model-chip ${l.key === selectedTargetLang ? 'active' : ''}" onclick="selectTranslateLang('${l.key}')"><span class="dot"></span>${l.title}</div>
+    `).join('');
+    document.getElementById('translateStyleRow').innerHTML = data.styles.map(s => `
+      <div class="model-chip ${s.key === selectedTranslateStyle ? 'active' : ''}" onclick="selectTranslateStyle('${s.key}')"><span class="dot"></span>${s.title}</div>
+    `).join('');
+  }
+  function selectTranslateLang(key){ selectedTargetLang = key; loadTranslateOptions(); }
+  function selectTranslateStyle(key){ selectedTranslateStyle = key; loadTranslateOptions(); }
+
+  // ---------- чат ----------
+  function addBubble(text, who){
+    const win = document.getElementById('chatWindow');
+    const div = document.createElement('div');
+    div.className = 'bubble ' + who;
+    div.textContent = text;
+    win.appendChild(div);
+    win.scrollTop = win.scrollHeight;
+  }
+
+  async function sendChat(){
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addBubble(text, 'user');
+    const btn = document.getElementById('chatSendBtn');
+    btn.disabled = true;
+    try {
+      const data = await api('/api/chat', {method:'POST', json:{message: text}});
+      addBubble(data.answer, 'bot');
+      loadProfile();
+    } catch(e) { /* тост уже показан */ }
+    btn.disabled = false;
+  }
+
+  // ---------- картинки ----------
+  async function generateImage(){
+    const prompt = document.getElementById('imagePrompt').value.trim();
+    if (!prompt) { showToast('Опиши, что нарисовать'); return; }
+    const btn = document.getElementById('imageGenBtn');
+    const result = document.getElementById('imageResult');
+    btn.disabled = true;
+    btn.textContent = 'Генерирую…';
+    result.innerHTML = '';
+    try {
+      const data = await api('/api/image', {method:'POST', json:{prompt, style: selectedImageStyle}});
+      result.innerHTML = `<img src="data:image/png;base64,${data.image_base64}" style="width:100%;border-radius:16px;margin-top:14px;">`;
+      loadProfile();
+    } catch(e) { /* тост уже показан */ }
+    btn.disabled = false;
+    btn.textContent = 'Сгенерировать';
+  }
+
+  // ---------- перевод ----------
+  async function doTranslate(){
+    const text = document.getElementById('translateInput').value.trim();
+    if (!text) { showToast('Вставь текст для перевода'); return; }
+    const btn = document.getElementById('translateBtn');
+    const result = document.getElementById('translateResult');
+    btn.disabled = true;
+    try {
+      const data = await api('/api/translate', {method:'POST', json:{text, target_lang: selectedTargetLang, style: selectedTranslateStyle}});
+      result.innerHTML = `<div class="chat-window" style="margin-top:14px;"><div class="bubble bot">${data.result}</div></div>`;
+      loadProfile();
+    } catch(e) { /* тост уже показан */ }
+    btn.disabled = false;
+  }
+
+  // ---------- документы ----------
+  async function uploadDocument(){
+    const fileInput = document.getElementById('docFile');
+    const file = fileInput.files[0];
+    if (!file) return;
+    document.getElementById('dropzoneTitle').textContent = 'Загружаю…';
+
+    const form = new FormData();
+    form.append('file', file);
+    try {
+      const res = await fetch(API_BASE + '/api/document/upload', {
+        method: 'POST',
+        headers: {'X-Telegram-Init-Data': initData},
+        body: form,
+      });
+      const data = await res.json();
+      if (!res.ok) { showToast(data.message || 'Не удалось прочитать файл'); document.getElementById('dropzoneTitle').textContent = 'Отправь документ'; return; }
+      document.getElementById('dropzoneTitle').textContent = `✅ ${data.name}`;
+      document.getElementById('dropzoneHint').textContent = 'Готово — задай вопрос ниже';
+      document.getElementById('docQA').style.display = 'block';
+    } catch(e) {
+      document.getElementById('dropzoneTitle').textContent = 'Отправь документ';
+    }
+  }
+
+  async function askDocument(){
+    const input = document.getElementById('docQuestion');
+    const question = input.value.trim();
+    if (!question) return;
+    input.value = '';
+    const answerBox = document.getElementById('docAnswer');
+    answerBox.innerHTML = `<div class="chat-window" style="margin-top:12px;"><div class="bubble user">${question}</div></div>`;
+    try {
+      const data = await api('/api/document/ask', {method:'POST', json:{question}});
+      answerBox.innerHTML = `<div class="chat-window" style="margin-top:12px;"><div class="bubble user">${question}</div><div class="bubble bot">${data.answer}</div></div>`;
+      loadProfile();
+    } catch(e) { /* тост уже показан */ }
+  }
+
+  // ---------- тарифы / оплата ----------
+  async function buyPlan(planKey){
+    haptic();
+    let data;
+    try { data = await api('/api/premium/invoice', {method:'POST', json:{plan: planKey}}); }
+    catch(e){ return; }
+    try {
+      Telegram.WebApp.openInvoice(data.invoice_link, (status)=>{
+        if (status === 'paid') { showToast('Оплачено! Тариф активирован 🎉'); loadProfile(); }
+        else if (status === 'cancelled') { showToast('Оплата отменена'); }
+        else if (status === 'failed') { showToast('Платёж не прошёл'); }
+      });
+    } catch(e) {
+      showToast('Открой это в Telegram, чтобы оплатить');
+    }
+  }
+
+  // ---------- рефералка ----------
+  async function shareReferral(){
+    let data;
+    try { data = await api('/api/referral'); } catch(e){ return; }
+    try {
+      await navigator.clipboard.writeText(data.link);
+      showToast('Ссылка скопирована!');
+    } catch(e) {
+      showToast(data.link);
+    }
+  }
+
+  // ---------- язык интерфейса ----------
+  async function setLang(el, lang){
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+    try { await api('/api/language', {method:'POST', json:{lang}}); } catch(e){ return; }
+    loadProfile();
+  }
+
+  // ---------- старт ----------
+  function init(){
+    if (!initData) {
+      document.getElementById('app').innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:24px;text-align:center;gap:10px;">
+          <h2 style="font-family:var(--font-display);">Открой через бота</h2>
+          <p style="color:var(--text-muted);font-size:13.5px;">Это мини-приложение работает только внутри Telegram — открой его кнопкой 🚀 App рядом со строкой ввода или командой /app.</p>
+        </div>`;
+      return;
+    }
+    loadProfile();
+    loadModels();
+    loadTranslateOptions();
+  }
+
+  init();
 </script>
 </body>
 </html>
