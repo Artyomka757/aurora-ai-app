@@ -766,13 +766,16 @@
     }
     const res = await fetch(API_BASE + path, {
       method: options.method || 'GET',
-      headers: Object.assign({'X-Telegram-Init-Data': initData}, options.json ? {'Content-Type': 'application/json'} : {}),
+      headers: Object.assign(
+        {'X-Telegram-Init-Data': initData, 'ngrok-skip-browser-warning': 'true'},
+        options.json ? {'Content-Type': 'application/json'} : {}
+      ),
       body: options.json ? JSON.stringify(options.json) : options.body,
     });
     let data = null;
     try { data = await res.json(); } catch(e) {}
-    if (!res.ok) {
-      const msg = (data && data.message) || 'Что-то пошло не так';
+    if (!res.ok || !data) {
+      const msg = (data && data.message) || 'Сервер не отвечает — проверь, что бот и туннель запущены';
       showToast(msg);
       throw new Error((data && data.error) || 'request_failed');
     }
@@ -948,7 +951,7 @@
     try {
       const res = await fetch(API_BASE + '/api/document/upload', {
         method: 'POST',
-        headers: {'X-Telegram-Init-Data': initData},
+        headers: {'X-Telegram-Init-Data': initData, 'ngrok-skip-browser-warning': 'true'},
         body: form,
       });
       const data = await res.json();
