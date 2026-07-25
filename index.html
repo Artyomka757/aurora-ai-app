@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Aurora AI</title>
+<title>Multi GPT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -548,64 +548,64 @@
 
       <div class="plan-card">
         <div class="plan-head">
-          <h3>🆓 Бесплатный</h3>
+          <h3 data-i18n="plan_free_title">🆓 Бесплатный</h3>
           <div class="plan-price">0 ⭐</div>
         </div>
         <ul class="plan-features">
-          <li>✅ 100 запросов в неделю</li>
+          <li data-i18n="plan_free_f1">✅ 100 запросов в неделю</li>
           <li>✅ GPT-5.4 · Gemini 3 Flash · Claude Sonnet 5</li>
-          <li>🎨 25 генераций изображений в неделю</li>
+          <li data-i18n="plan_free_f3">🎨 25 генераций изображений в неделю</li>
         </ul>
         <button class="plan-cta" disabled style="opacity:.5; cursor:default;" data-i18n="btn_current_plan">Текущий тариф</button>
       </div>
 
       <div class="plan-card">
         <div class="plan-head">
-          <h3>💎 Premium · месяц</h3>
+          <h3 data-i18n="plan_month_title">💎 Premium · месяц</h3>
           <div class="plan-price">600 ⭐<small>≈ 1 200 ₽</small></div>
         </div>
         <ul class="plan-features">
-          <li>✅ 100 запросов в день — в 7 раз больше</li>
+          <li data-i18n="plan_month_f1">✅ 100 запросов в день — в 7 раз больше</li>
           <li>🧠 GPT-5.5 · Claude Opus 4.8 · Gemini 3.5 Flash</li>
-          <li>🎨 100 генераций изображений в месяц</li>
-          <li>📎 Работа с документами · 🎙 Голосовые ответы</li>
+          <li data-i18n="plan_month_f3">🎨 100 генераций изображений в месяц</li>
+          <li data-i18n="plan_month_f4">📎 Работа с документами · 🎙 Голосовые ответы</li>
         </ul>
         <button class="plan-cta" onclick="buyPlan('month')" data-i18n="btn_subscribe">Оформить</button>
       </div>
 
       <div class="plan-card highlight">
         <div class="plan-head">
-          <h3>💎 Premium · 3 месяца</h3>
+          <h3 data-i18n="plan_3month_title">💎 Premium · 3 месяца</h3>
           <div class="plan-price">1 200 ⭐<small>−33%</small></div>
         </div>
         <ul class="plan-features">
-          <li>✅ 200 запросов в день</li>
-          <li>🎨 350 генераций изображений за период</li>
-          <li>🌅 Видео из промпта · работа с презентациями</li>
+          <li data-i18n="plan_3month_f1">✅ 200 запросов в день</li>
+          <li data-i18n="plan_3month_f2">🎨 350 генераций изображений за период</li>
+          <li data-i18n="plan_3month_f3">🌅 Видео из промпта · работа с презентациями</li>
         </ul>
         <button class="plan-cta" onclick="buyPlan('3month')" data-i18n="btn_subscribe">Оформить</button>
       </div>
 
       <div class="plan-card">
         <div class="plan-head">
-          <h3>👑 Premium · 6 месяцев</h3>
+          <h3 data-i18n="plan_6month_title">👑 Premium · 6 месяцев</h3>
           <div class="plan-price">1 990 ⭐<small>−45%</small></div>
         </div>
         <ul class="plan-features">
-          <li>♾️ Безлимитные запросы и картинки</li>
-          <li>📊 Безлимитные презентации</li>
+          <li data-i18n="plan_unlim_f1">♾️ Безлимитные запросы и картинки</li>
+          <li data-i18n="plan_6month_f2">📊 Безлимитные презентации</li>
         </ul>
         <button class="plan-cta" onclick="buyPlan('6month')" data-i18n="btn_subscribe">Оформить</button>
       </div>
 
       <div class="plan-card">
         <div class="plan-head">
-          <h3>👑 Premium · 12 месяцев</h3>
+          <h3 data-i18n="plan_year_title">👑 Premium · 12 месяцев</h3>
           <div class="plan-price">3 250 ⭐<small>−55%</small></div>
         </div>
         <ul class="plan-features">
-          <li>♾️ Безлимитные запросы и картинки</li>
-          <li>💰 Максимальная выгода на весь год</li>
+          <li data-i18n="plan_unlim_f1">♾️ Безлимитные запросы и картинки</li>
+          <li data-i18n="plan_year_f2">💰 Максимальная выгода на весь год</li>
         </ul>
         <button class="plan-cta" onclick="buyPlan('year')" data-i18n="btn_subscribe">Оформить</button>
       </div>
@@ -781,6 +781,13 @@
       my_models:'Мои модели', change:'изменить', interface_language:'Язык интерфейса',
       support:'Поддержка', contact_support:'Связаться с поддержкой', terms:'Пользовательское соглашение',
       nav_home:'Главная', nav_create:'Создать', nav_history:'История', nav_tariffs:'Тарифы', nav_profile:'Профиль',
+      plan_free_title:'🆓 Бесплатный', plan_free_f1:'✅ 100 запросов в неделю', plan_free_f3:'🎨 25 генераций изображений в неделю',
+      plan_month_title:'💎 Premium · месяц', plan_month_f1:'✅ 100 запросов в день — в 7 раз больше',
+      plan_month_f3:'🎨 100 генераций изображений в месяц', plan_month_f4:'📎 Работа с документами · 🎙 Голосовые ответы',
+      plan_3month_title:'💎 Premium · 3 месяца', plan_3month_f1:'✅ 200 запросов в день',
+      plan_3month_f2:'🎨 350 генераций изображений за период', plan_3month_f3:'🌅 Видео из промпта · работа с презентациями',
+      plan_6month_title:'👑 Premium · 6 месяцев', plan_unlim_f1:'♾️ Безлимитные запросы и картинки', plan_6month_f2:'📊 Безлимитные презентации',
+      plan_year_title:'👑 Premium · 12 месяцев', plan_year_f2:'💰 Максимальная выгода на весь год',
     },
     en: {
       greeting:'Welcome back,', requests_left:'requests left', images_left:'images left',
@@ -808,6 +815,13 @@
       my_models:'My models', change:'change', interface_language:'Interface language',
       support:'Support', contact_support:'Contact support', terms:'Terms of use',
       nav_home:'Home', nav_create:'Create', nav_history:'History', nav_tariffs:'Plans', nav_profile:'Profile',
+      plan_free_title:'🆓 Free', plan_free_f1:'✅ 100 requests per week', plan_free_f3:'🎨 25 image generations per week',
+      plan_month_title:'💎 Premium · month', plan_month_f1:'✅ 100 requests per day — 7x more',
+      plan_month_f3:'🎨 100 image generations per month', plan_month_f4:'📎 Document Q&A · 🎙 Voice answers',
+      plan_3month_title:'💎 Premium · 3 months', plan_3month_f1:'✅ 200 requests per day',
+      plan_3month_f2:'🎨 350 image generations per period', plan_3month_f3:'🌅 Video from prompt · presentation support',
+      plan_6month_title:'👑 Premium · 6 months', plan_unlim_f1:'♾️ Unlimited requests and images', plan_6month_f2:'📊 Unlimited presentations',
+      plan_year_title:'👑 Premium · 12 months', plan_year_f2:'💰 Best value for the whole year',
     },
   };
 
