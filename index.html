@@ -16,15 +16,15 @@
     --hairline:#33312B;
 
     --violet:#E8C468;
-    --violet-soft:rgba(232,196,104,.16);
-    --cyan:#ACB2B8;
-    --cyan-soft:rgba(172,178,184,.16);
+    --violet-soft:rgba(232,196,104,.18);
+    --cyan:#DCDFE1;
+    --cyan-soft:rgba(220,223,225,.20);
     --pink:#E8C468;
-    --pink-soft:rgba(232,196,104,.16);
-    --mint:#9DA3A9;
-    --mint-soft:rgba(157,163,169,.16);
+    --pink-soft:rgba(232,196,104,.18);
+    --mint:#DCDFE1;
+    --mint-soft:rgba(220,223,225,.20);
     --amber:#E8C468;
-    --amber-soft:rgba(232,196,104,.18);
+    --amber-soft:rgba(232,196,104,.20);
 
     --text-primary:#F5F3EE;
     --text-muted:#9C9690;
@@ -181,7 +181,7 @@
   }
   .tool-hero .ic{
     width:46px;height:46px;border-radius:13px;
-    background:var(--violet-soft); color:var(--violet);
+    background:var(--violet-soft); color:var(--violet); border:1px solid rgba(232,196,104,.35);
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
   .tool-hero h3{font-size:16.5px; margin-bottom:3px;}
@@ -195,13 +195,14 @@
   .tool-card .ic{
     width:38px;height:38px;border-radius:11px;
     display:flex; align-items:center; justify-content:center; margin-bottom:10px;
+    border:1px solid rgba(255,255,255,.08);
   }
   .tool-card h4{font-size:14px; font-weight:700; margin:0 0 3px;}
   .tool-card p{font-size:11.5px; color:var(--text-muted); margin:0; line-height:1.35;}
-  .tool-card.cyan .ic{background:var(--cyan-soft); color:var(--cyan);}
-  .tool-card.pink .ic{background:var(--pink-soft); color:var(--pink);}
-  .tool-card.mint .ic{background:var(--mint-soft); color:var(--mint);}
-  .tool-card.amber .ic{background:var(--amber-soft); color:var(--amber);}
+  .tool-card.cyan .ic{background:var(--cyan-soft); color:var(--cyan); border-color:rgba(220,223,225,.35);}
+  .tool-card.pink .ic{background:var(--pink-soft); color:var(--pink); border-color:rgba(232,196,104,.35);}
+  .tool-card.mint .ic{background:var(--mint-soft); color:var(--mint); border-color:rgba(220,223,225,.35);}
+  .tool-card.amber .ic{background:var(--amber-soft); color:var(--amber); border-color:rgba(232,196,104,.35);}
 
   .plan-banner{
     margin-top:14px; display:flex; align-items:center; justify-content:space-between;
