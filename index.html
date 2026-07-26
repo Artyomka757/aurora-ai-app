@@ -15,16 +15,16 @@
     --bg-surface-3:#2A2926;
     --hairline:#33312B;
 
-    --violet:#C9A227;
-    --violet-soft:rgba(201,162,39,.14);
+    --violet:#E8C468;
+    --violet-soft:rgba(232,196,104,.16);
     --cyan:#ACB2B8;
-    --cyan-soft:rgba(172,178,184,.14);
-    --pink:#A9895A;
-    --pink-soft:rgba(169,137,90,.14);
-    --mint:#D4AF6A;
-    --mint-soft:rgba(212,175,106,.14);
+    --cyan-soft:rgba(172,178,184,.16);
+    --pink:#E8C468;
+    --pink-soft:rgba(232,196,104,.16);
+    --mint:#9DA3A9;
+    --mint-soft:rgba(157,163,169,.16);
     --amber:#E8C468;
-    --amber-soft:rgba(232,196,104,.16);
+    --amber-soft:rgba(232,196,104,.18);
 
     --text-primary:#F5F3EE;
     --text-muted:#9C9690;
@@ -146,7 +146,7 @@
   .hero-row{position:relative; display:flex; align-items:center; gap:12px;}
   .avatar{
     width:52px;height:52px;border-radius:16px;
-    background:linear-gradient(145deg, var(--violet), var(--pink));
+    background:linear-gradient(145deg, var(--amber), var(--cyan));
     display:flex; align-items:center; justify-content:center;
     font-family:var(--font-display); font-weight:800; font-size:20px;
     flex-shrink:0;
@@ -248,11 +248,12 @@
 
   .btn-primary{
     width:100%; margin-top:14px; border:none; cursor:pointer;
-    background:linear-gradient(120deg, var(--violet), var(--pink));
-    color:#fff; font-family:var(--font-display); font-weight:700; font-size:14.5px;
+    background:linear-gradient(120deg, #F3D68A, var(--amber) 55%, #B8892F);
+    color:#241B08; font-family:var(--font-display); font-weight:800; font-size:14.5px;
     padding:15px; border-radius:var(--radius-md);
+    box-shadow:0 10px 28px rgba(232,196,104,.28);
   }
-  .btn-primary:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+  .btn-primary:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
 
   .chat-window{
     background:var(--bg-surface); border:1px solid var(--hairline); border-radius:var(--radius-md);
@@ -265,8 +266,9 @@
   .chat-input-row input{flex:1;}
   .send-btn{
     width:44px; flex-shrink:0; border:none; border-radius:var(--radius-sm); cursor:pointer;
-    background:linear-gradient(120deg, var(--violet), var(--cyan)); color:#fff;
+    background:linear-gradient(135deg, #F3D68A, var(--amber)); color:#241B08;
     display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(232,196,104,.25);
   }
 
   .style-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px;}
@@ -324,7 +326,7 @@
     padding:12px; font-family:var(--font-display); font-weight:700; font-size:13.5px;
     background:var(--bg-surface-3); color:var(--text-primary);
   }
-  .plan-card.highlight .plan-cta{background:linear-gradient(120deg, var(--violet), var(--pink)); color:#fff;}
+  .plan-card.highlight .plan-cta{background:linear-gradient(120deg, #F3D68A, var(--amber) 55%, #B8892F); color:#241B08; box-shadow:0 10px 24px rgba(232,196,104,.25);}
 
   /* ---------- profile ---------- */
   .profile-banner{
