@@ -9,26 +9,26 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root{
-    --bg-void:#0B0F1F;
-    --bg-surface:#151A33;
-    --bg-surface-2:#1E2444;
-    --bg-surface-3:#262C50;
-    --hairline:#2A3159;
+    --bg-void:#0A0A0C;
+    --bg-surface:#161615;
+    --bg-surface-2:#1F1E1C;
+    --bg-surface-3:#2A2926;
+    --hairline:#33312B;
 
-    --violet:#8B5CF6;
-    --violet-soft:rgba(139,92,246,.16);
-    --cyan:#22D3EE;
-    --cyan-soft:rgba(34,211,238,.16);
-    --pink:#F472B6;
-    --pink-soft:rgba(244,114,182,.16);
-    --mint:#34D399;
-    --mint-soft:rgba(52,211,153,.16);
-    --amber:#FBBF24;
-    --amber-soft:rgba(251,191,36,.16);
+    --violet:#8C94F0;
+    --violet-soft:rgba(140,148,240,.16);
+    --cyan:#2FBF9E;
+    --cyan-soft:rgba(47,191,158,.16);
+    --pink:#E8743B;
+    --pink-soft:rgba(232,116,59,.16);
+    --mint:#D4AF6A;
+    --mint-soft:rgba(212,175,106,.16);
+    --amber:#E3B23C;
+    --amber-soft:rgba(227,178,60,.16);
 
-    --text-primary:#F5F6FF;
-    --text-muted:#9096B8;
-    --text-faint:#5E6489;
+    --text-primary:#F5F3EE;
+    --text-muted:#9C9690;
+    --text-faint:#5C574E;
 
     --font-display:'Manrope',sans-serif;
     --font-body:'Inter',sans-serif;
@@ -89,8 +89,9 @@
   .brand{display:flex; align-items:center; gap:9px;}
   .brand-mark{
     width:30px;height:30px;border-radius:9px;
-    background:conic-gradient(from 200deg, var(--violet), var(--cyan), var(--pink), var(--violet));
+    background:#000 url('logo.png') center/cover no-repeat;
     flex-shrink:0;
+    border:1px solid var(--hairline);
   }
   .brand-name{font-family:var(--font-display); font-weight:800; font-size:16px; letter-spacing:.2px;}
   .plan-chip{
@@ -174,7 +175,7 @@
     display:flex; gap:14px; align-items:center;
     border-radius:var(--radius-lg);
     padding:18px;
-    background:linear-gradient(135deg, #2A1F55, #1A2A52);
+    background:linear-gradient(135deg, #241F16, #1B1A17);
     border:1px solid var(--hairline);
     cursor:pointer;
   }
@@ -391,7 +392,7 @@
   <div class="topbar">
     <div class="brand">
       <div class="brand-mark"></div>
-      <span class="brand-name">Aurora AI</span>
+      <span class="brand-name">Multi GPT</span>
     </div>
     <div class="plan-chip" id="planChip"><span class="dot"></span><span id="planChipText">…</span></div>
   </div>
@@ -682,7 +683,7 @@
         </div>
       </div>
 
-      <p class="footnote">Aurora AI · v1.0</p>
+      <p class="footnote">Multi GPT · v1.0</p>
     </section>
 
   </div>
