@@ -52,7 +52,7 @@
   }
   body{
     margin:0;
-    background:#05070f;
+    background:var(--bg-void);
     font-family:var(--font-body);
     color:var(--text-primary);
     display:flex;
@@ -739,6 +739,8 @@
 
 <script>
   try{ window.Telegram && Telegram.WebApp && Telegram.WebApp.ready() && Telegram.WebApp.expand(); }catch(e){}
+  try{ Telegram.WebApp.setHeaderColor('#0A0A0C'); }catch(e){}
+  try{ Telegram.WebApp.setBackgroundColor('#0A0A0C'); }catch(e){}
 
   // Адрес API передаёт бот в ссылке кнопки: ...?api=https://твой-туннель-или-домен
   const API_BASE = new URLSearchParams(location.search).get('api') || '';
