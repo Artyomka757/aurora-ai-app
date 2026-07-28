@@ -18,12 +18,12 @@
 
     --violet:#E8C468;
     --violet-soft:rgba(232,196,104,.18);
-    --cyan:#DCDFE1;
-    --cyan-soft:rgba(220,223,225,.20);
-    --pink:#7C90F0;
-    --pink-soft:rgba(124,144,240,.20);
-    --mint:#E8C468;
-    --mint-soft:rgba(232,196,104,.18);
+    --cyan:#3EBFA0;
+    --cyan-soft:rgba(62,191,160,.18);
+    --pink:#8C9AF2;
+    --pink-soft:rgba(140,154,242,.18);
+    --mint:#E08A4E;
+    --mint-soft:rgba(224,138,78,.18);
     --amber:#E8C468;
     --amber-soft:rgba(232,196,104,.20);
 
@@ -153,9 +153,9 @@
   }
   .ribbon{
     position:absolute; left:-20%; right:-20%; top:-60%; height:180px;
-    background:linear-gradient(120deg, var(--amber), var(--cyan));
-    filter:blur(42px);
-    opacity:.35;
+    background:linear-gradient(120deg, var(--amber), var(--cyan) 40%, var(--pink) 70%, var(--mint));
+    filter:blur(46px);
+    opacity:.3;
     animation:drift 9s ease-in-out infinite alternate;
   }
   @keyframes drift{
